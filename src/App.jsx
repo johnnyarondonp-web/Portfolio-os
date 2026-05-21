@@ -2,8 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import Desktop from './components/Desktop';
 import Taskbar from './components/Taskbar';
 import Window from './components/Window';
+import MobileLayout from './components/MobileLayout';
 import { useWindows } from './context/WindowContext';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+  return isMobile;
+};
 
 const playStartupChime = () => {
   try {
@@ -33,8 +45,8 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [bootStatus, setBootStatus] = useState('loggingIn');
   const chimePlayed = useRef(false);
+  const isMobile = useIsMobile();
 
-  // Login screen auto-dismisses after a short delay
   useEffect(() => {
     if (bootStatus === 'loggingIn') {
       const timer = setTimeout(() => setBootStatus('ready'), 400);
@@ -42,9 +54,6 @@ function App() {
     }
   }, [bootStatus]);
 
-  // Play chime on first interaction anywhere — but tied to the taskbar
-  // slide-in animation (which completes ~800ms after ready), so it feels
-  // like the sound comes WITH the desktop appearing, not randomly later.
   const handleFirstInteraction = () => {
     if (chimePlayed.current) return;
     chimePlayed.current = true;
@@ -54,10 +63,6 @@ function App() {
 
   useEffect(() => {
     if (bootStatus === 'ready') {
-      // Small delay so the chime plays right as the taskbar finishes sliding in
-      // (~800ms animation). First touch/click after that triggers it.
-      // But we also fire it automatically on the first pointer event,
-      // which in practice is the user's first natural interaction.
       window.addEventListener('pointerdown', handleFirstInteraction);
       return () => window.removeEventListener('pointerdown', handleFirstInteraction);
     }
@@ -69,9 +74,46 @@ function App() {
     setTimeout(() => setBootStatus('loggingIn'), 4500);
   };
 
+  // Mobile: completely different UI — no windows, no taskbar
+  if (isMobile) {
+    return (
+      <div className={`w-screen h-screen overflow-hidden ${isDarkMode ? 'dark' : ''}`}>
+        <AnimatePresence>
+          {bootStatus === 'ready' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-full h-full"
+            >
+              <MobileLayout isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {bootStatus === 'loggingIn' && (
+            <motion.div
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className={`absolute inset-0 z-50 flex flex-col items-center justify-center ${isDarkMode ? 'bg-slate-950' : 'bg-gray-50'}`}
+            >
+              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"/>
+              <p className={`text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>Iniciando sesión...</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        {bootStatus === 'booting' && (
+          <div className="absolute inset-0 z-50 bg-black text-white font-mono text-sm p-6 overflow-hidden">
+            <BIOSSequence />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Desktop: original OS experience
   return (
     <div className={`relative w-screen h-screen overflow-hidden font-sans transition-colors duration-500 ${isDarkMode ? 'dark text-slate-100' : 'text-gray-900'}`}>
-
       <AnimatePresence>
         {bootStatus !== 'booting' && (
           <motion.div
@@ -100,7 +142,6 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* Login overlay — auto-dismisses, no click needed */}
       <AnimatePresence>
         {bootStatus === 'loggingIn' && (
           <motion.div
@@ -117,7 +158,6 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* BIOS screen */}
       {bootStatus === 'booting' && (
         <div className="absolute inset-0 z-[10000] bg-black text-white font-mono text-sm p-6 overflow-hidden select-none">
           <BIOSSequence />

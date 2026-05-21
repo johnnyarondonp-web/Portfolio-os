@@ -9,6 +9,11 @@ import {
 import heroImg from '../assets/hero.png';
 import zoionPreview from '../assets/zoion-preview.png';
 import eunoiaPreview from '../assets/eunoia-preview.png';
+import zoionAdmin from '../assets/zoion-admin.png';
+import zoionMobile1 from '../assets/zoion-mobile-1.webp';
+import zoionMobile2 from '../assets/zoion-mobile-2.webp';
+import eunoiaBalance from '../assets/eunoia-balance.png';
+import eunoiaVentas from '../assets/eunoia-ventas.png';
 
 /* ─── 3D Tilt card ─── */
 const TiltCard = ({ children, className }) => {
@@ -129,7 +134,7 @@ const AboutPage = () => {
         <div className="pointer-events-none absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-purple-400/20 blur-2xl" />
 
-        <div className="relative flex flex-col md:flex-row gap-6 items-center md:items-start">
+        <div className="relative flex flex-row gap-6 items-start">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -146,7 +151,7 @@ const AboutPage = () => {
             <span className="absolute bottom-1 right-1 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full shadow" />
           </motion.div>
 
-          <div className="text-left space-y-2 flex-1">
+          <div className="text-left space-y-1 flex-1 min-w-0">
             <AnimatedName />
 
             <motion.div
@@ -413,8 +418,8 @@ const BrowserApp = ({ initialTab = 'about' }) => {
         </div>
         
         <div className="flex items-center gap-2 text-gray-400 dark:text-slate-500 ml-1">
-          <ArrowLeft size={16} className="cursor-not-allowed" />
-          <ArrowRight size={16} className="cursor-not-allowed" />
+          <ArrowLeft size={16} className={`transition-colors ${selectedProject ? 'cursor-pointer hover:text-gray-800 dark:hover:text-white' : 'cursor-not-allowed text-gray-300 dark:text-slate-600'}`} onClick={() => selectedProject && setSelectedProject(null)} />
+          <ArrowRight size={16} className="cursor-not-allowed text-gray-300 dark:text-slate-600" />
           <RotateCw size={15} className="hover:text-gray-600 dark:hover:text-slate-300 cursor-pointer transition-colors" />
         </div>
         
@@ -425,7 +430,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 bg-white dark:bg-slate-900 overflow-y-auto p-6 md:p-8 relative transition-colors text-gray-800 dark:text-slate-200">
+      <div className="flex-1 bg-white dark:bg-slate-900 overflow-y-auto p-4 md:p-6 lg:p-8 relative transition-colors text-gray-800 dark:text-slate-200">
         <AnimatePresence mode="wait">
 
           {activePage === 'about' && (
@@ -535,7 +540,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
           {activePage === 'projects' && (
             <motion.div key="projects" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="space-y-6">
               {selectedProject === null ? (
-                <div className="space-y-6">
+                <div className="space-y-6 max-w-5xl mx-auto w-full px-2">
                   {/* Header */}
                   <div className="border-b border-gray-100 dark:border-slate-800 pb-4">
                     <h1 className="text-xl font-black text-gray-800 dark:text-white tracking-tight flex items-center gap-2">
@@ -554,7 +559,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                       onClick={() => setSelectedProject('zoion')}
                     >
                       {/* Browser mockup image */}
-                      <div className="relative overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800" style={{ height: '240px' }}>
+                      <div className="relative overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800" style={{ height: "180px" }}>
                         {/* Browser chrome bar */}
                         <div className="absolute top-0 left-0 right-0 z-10 flex items-center gap-1.5 px-3 h-[28px] bg-gradient-to-b from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border-b border-gray-300 dark:border-slate-700 shadow-sm">
                           <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
@@ -582,7 +587,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                             <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed">Plataforma ERP para clínicas veterinarias con agendamiento Round-Robin, bloqueos atómicos Redis y RBAC multinivel.</p>
                             <div className="flex flex-wrap gap-1.5 pt-1">
                               {['Laravel 13','React 19','TypeScript','Inertia.js','PostgreSQL','Redis','Tailwind CSS 4'].map(t => (
-                                <span key={t} className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[9px] font-bold text-gray-600 dark:text-slate-300">{t}</span>
+                                <span key={t} className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-100 dark:border-emerald-800/50 rounded text-[9px] font-bold text-emerald-600 dark:text-emerald-400">{t}</span>
                               ))}
                             </div>
                           </div>
@@ -596,7 +601,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                               className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all"
                               title="Ver en GitHub"
                             >
-                              <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                              <svg viewBox="0 0 24 24" width={20} height={20} fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                             </a>
                             <div className="flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform duration-200">
                               Ver más <ChevronRight size={14} />
@@ -613,7 +618,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                       onClick={() => setSelectedProject('eunoia')}
                     >
                       {/* Browser mockup image */}
-                      <div className="relative overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800" style={{ height: '240px' }}>
+                      <div className="relative overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-gray-100 dark:border-slate-800" style={{ height: "180px" }}>
                         <div className="absolute top-0 left-0 right-0 z-10 flex items-center gap-1.5 px-3 h-[28px] bg-gradient-to-b from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border-b border-gray-300 dark:border-slate-700 shadow-sm">
                           <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
                           <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
@@ -639,7 +644,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                             <p className="text-xs text-gray-500 dark:text-slate-400 leading-relaxed">ERP retail con inventario FIFO, contabilidad multimoneda, tasa BCV en tiempo real e índices compuestos PostgreSQL.</p>
                             <div className="flex flex-wrap gap-1.5 pt-1">
                               {['Laravel 13','PHP 8.3','Alpine.js','MySQL','Tailwind CSS 3','Vite','Axios'].map(t => (
-                                <span key={t} className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[9px] font-bold text-gray-600 dark:text-slate-300">{t}</span>
+                                <span key={t} className="px-2 py-0.5 bg-pink-50 dark:bg-pink-900/30 border border-pink-100 dark:border-pink-800/50 rounded text-[9px] font-bold text-pink-600 dark:text-pink-400">{t}</span>
                               ))}
                             </div>
                           </div>
@@ -653,7 +658,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                               className="p-1.5 rounded-lg text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/30 transition-all"
                               title="Ver en GitHub"
                             >
-                              <svg viewBox="0 0 24 24" width={16} height={16} fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                              <svg viewBox="0 0 24 24" width={20} height={20} fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                             </a>
                             <div className="flex items-center gap-1 text-xs font-bold text-pink-600 dark:text-pink-400 group-hover:translate-x-1 transition-transform duration-200">
                               Ver más <ChevronRight size={14} />
@@ -685,40 +690,104 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                           </div>
                         </div>
                         {/* Scrollable image container */}
-                        <div className="w-full max-h-[600px] overflow-y-auto bg-slate-100 dark:bg-slate-950 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-track]:bg-transparent">
-                          <img src={zoionPreview} alt="Zoion Completo" className="w-full h-auto block" />
+                        <div className="w-full bg-slate-100 dark:bg-slate-950">
+                          <div className="p-4 sm:p-6 md:p-10 space-y-6 md:space-y-8 max-w-5xl mx-auto">
+                            <img src={zoionPreview} alt="Zoion Completo" className="w-full h-auto block rounded-xl shadow-md border border-gray-200 dark:border-slate-800" />
+                            
+                            {/* Extra Captures */}
+                            <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
+                              
+                              {/* Grid for Mobile images */}
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                  <img src={zoionMobile1} alt="Zoion Mobile App" className="w-full h-auto block" />
+                                </div>
+                                <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                  <img src={zoionMobile2} alt="Zoion Mobile Calendar" className="w-full h-auto block" />
+                                </div>
+                              </div>
+                              
+                              {/* Admin Dashboard image */}
+                              <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <img src={zoionAdmin} alt="Zoion Admin Dashboard" className="w-full h-auto block" />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       {/* Header */}
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full">Clínico / ERP</span>
-                          <h1 className="text-lg font-black text-gray-800 dark:text-white mt-1">Zoion — Gestión Veterinaria</h1>
-                          <p className="text-xs text-emerald-600 font-semibold">Laravel 13 · React 19 · TypeScript · Inertia.js · PostgreSQL · Redis · Tailwind CSS</p>
+                      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full inline-block">Clínico / ERP</span>
+                          <h1 className="text-xl md:text-2xl font-black text-gray-800 dark:text-white mt-1">Zoion — Gestión Veterinaria</h1>
+                          <p className="text-xs md:text-sm text-emerald-600 font-semibold leading-relaxed">Laravel 13 · React 19 · TypeScript · Inertia.js · PostgreSQL · Redis · Tailwind CSS</p>
                         </div>
                         <a
                           href="https://github.com/johnnyarondonp-web/Zoion-sistema"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all flex-shrink-0"
+                          className="w-full md:w-auto p-3 md:p-4 rounded-xl text-gray-500 hover:text-white hover:bg-emerald-500 dark:hover:bg-emerald-600 shadow-sm hover:shadow-lg transition-all flex-shrink-0 border border-gray-200 dark:border-slate-700 hover:border-emerald-500 bg-white dark:bg-slate-800 flex items-center justify-center gap-2 group"
                           title="Ver en GitHub"
                         >
-                          <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                          <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-7 md:h-7" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                          <span className="text-sm font-bold md:hidden group-hover:text-white text-gray-700 dark:text-gray-300">Ver Repositorio</span>
                         </a>
                       </div>
-                      <p className="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">Plataforma ERP integral para clínicas veterinarias con portal público, médicos, clientes y administración centralizada.</p>
+                      <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed">Plataforma ERP integral para clínicas veterinarias con portal público, médicos, clientes y administración centralizada.</p>
                       {/* Features */}
-                      <div className="space-y-2">
-                        {[
-                          { t: 'Asignación Round-Robin', d: 'Equilibra la carga delegando la cita al médico con menos consultas activas usando colas Redis.' },
-                          { t: 'Bloqueos Atómicos', d: 'Evita duplicidad en reservas críticas garantizando integridad concurrente transaccional.' },
-                          { t: 'Booking Wizard 3 pasos', d: 'Validación estricta de solapamientos e intervalos de seguridad de 2 horas.' },
-                        ].map(({ t, d }) => (
-                          <div key={t} className="p-3 border border-gray-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
-                            <CheckCircle2 className="text-emerald-500 w-4 h-4 mt-0.5 flex-shrink-0" />
-                            <div><h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">{t}</h4><p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5">{d}</p></div>
+                      <div className="space-y-4">
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Lógica de Negocio Destacada</h3>
+                        <div className="space-y-3">
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-emerald-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Asignación round-robin</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">El médico con menos consultas activas ese día recibe la nueva cita. Sin intervención manual.</p>
+                            </div>
                           </div>
-                        ))}
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-emerald-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Bloqueos atómicos con Redis</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed"><code className="bg-gray-200 dark:bg-slate-700 px-1 py-0.5 rounded text-gray-700 dark:text-slate-300 font-mono">Cache::lock()</code> previene double-booking simultáneo garantizando integridad.</p>
+                            </div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-emerald-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Booking wizard de 3 pasos</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Validación estricta de solapamientos e intervalos de 2 horas previas requeridas.</p>
+                            </div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-emerald-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">RBAC de 4 roles</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Admin, recepcionista, médico y cliente con restricciones de borrado referencial.</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Stats */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Controladores</div>
+                            <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">20+</div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Tests Auto</div>
+                            <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">22</div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Páginas React</div>
+                            <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">30+</div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Roles</div>
+                            <div className="text-xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">4</div>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   ) : (
@@ -735,38 +804,104 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                           </div>
                         </div>
                         {/* Scrollable image container */}
-                        <div className="w-full max-h-[600px] overflow-y-auto bg-slate-100 dark:bg-slate-950 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-track]:bg-transparent">
-                          <img src={eunoiaPreview} alt="Eunoia Completo" className="w-full h-auto block" />
+                        <div className="w-full bg-slate-100 dark:bg-slate-950">
+                          <div className="p-4 sm:p-6 md:p-10 space-y-6 md:space-y-8 max-w-5xl mx-auto">
+                            <img src={eunoiaPreview} alt="Eunoia Completo" className="w-full h-auto block rounded-xl shadow-md border border-gray-200 dark:border-slate-800" />
+                            
+                            {/* Extra Captures */}
+                            <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
+                              
+                              {/* Extra Images */}
+                              <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <img src={eunoiaBalance} alt="Eunoia Balance y Rentabilidad" className="w-full h-auto block" />
+                              </div>
+                              <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <img src={eunoiaVentas} alt="Eunoia Registro de Ventas" className="w-full h-auto block" />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <span className="text-[10px] font-black uppercase tracking-wider text-pink-600 bg-pink-50 dark:bg-pink-900/30 px-2 py-0.5 rounded-full">Finanzas / ERP</span>
-                          <h1 className="text-lg font-black text-gray-800 dark:text-white mt-1">Eunoia — ERP Administrativo</h1>
-                          <p className="text-xs text-pink-600 font-semibold">Laravel 13 · PHP 8.3 · Alpine.js · MySQL · Tailwind CSS 3 · Vite · Axios</p>
+                      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div className="space-y-1">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-pink-600 bg-pink-50 dark:bg-pink-900/30 px-2 py-0.5 rounded-full inline-block">Finanzas / ERP</span>
+                          <h1 className="text-xl md:text-2xl font-black text-gray-800 dark:text-white mt-1">Eunoia — ERP Administrativo</h1>
+                          <p className="text-xs md:text-sm text-pink-600 font-semibold leading-relaxed">Laravel 13 · PHP 8.3 · Alpine.js · MySQL · Tailwind CSS 3 · Vite · Axios</p>
                         </div>
                         <a
                           href="https://github.com/johnnyarondonp-web/eunoia-sistema"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/30 transition-all flex-shrink-0"
+                          className="w-full md:w-auto p-3 md:p-4 rounded-xl text-gray-500 hover:text-white hover:bg-pink-500 dark:hover:bg-pink-600 shadow-sm hover:shadow-lg transition-all flex-shrink-0 border border-gray-200 dark:border-slate-700 hover:border-pink-500 bg-white dark:bg-slate-800 flex items-center justify-center gap-2 group"
                           title="Ver en GitHub"
                         >
-                          <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                          <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-7 md:h-7" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                          <span className="text-sm font-bold md:hidden group-hover:text-white text-gray-700 dark:text-gray-300">Ver Repositorio</span>
                         </a>
                       </div>
-                      <p className="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">ERP de vanguardia para retail: inventarios, ventas multimoneda, facturación con tasa BCV y balances de sucursales.</p>
-                      <div className="space-y-2">
-                        {[
-                          { t: 'Valuación FIFO (PEPS)', d: 'Deduce stock de lotes más antiguos y calcula el costo real de ventas con precisión milimétrica.' },
-                          { t: 'Índices Compuestos PostgreSQL', d: 'Condiciones parciales para reportes financieros con tiempos de respuesta bajo 5ms.' },
-                          { t: 'Multi-Moneda & Tasa BCV', d: 'Mapeo dinámico Dólar/Bolívar recalculando reactivamente los montos en el carrito.' },
-                        ].map(({ t, d }) => (
-                          <div key={t} className="p-3 border border-gray-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
-                            <CheckCircle2 className="text-pink-500 w-4 h-4 mt-0.5 flex-shrink-0" />
-                            <div><h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">{t}</h4><p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5">{d}</p></div>
+                      <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed">ERP de vanguardia para retail: inventarios, ventas multimoneda, facturación con tasa BCV y balances de sucursales.</p>
+                      
+                      {/* Features */}
+                      <div className="space-y-4">
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Lógica de Negocio Destacada</h3>
+                        <div className="space-y-3">
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-pink-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Valuación FIFO (PEPS)</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Deduce del lote más antiguo con stock, usando <code className="bg-gray-200 dark:bg-slate-700 px-1 py-0.5 rounded text-gray-700 dark:text-slate-300 font-mono">lockForUpdate()</code> para evitar race conditions.</p>
+                            </div>
                           </div>
-                        ))}
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-pink-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Tasa BCV automática</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Consulta la API BCV cada 30 min con caché. Cálculo reactivo USD a Bs al momento de venta.</p>
+                            </div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-pink-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Transacciones atómicas</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Ventas y cancelaciones manejan stock exacto mediante <code className="bg-gray-200 dark:bg-slate-700 px-1 py-0.5 rounded text-gray-700 dark:text-slate-300 font-mono">DB::transaction()</code> sin borrar el historial.</p>
+                            </div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-pink-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Índices compuestos PostgreSQL</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Consultas de reportes financieros bajo 5ms mediante índices dedicados en tablas críticas.</p>
+                            </div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl flex gap-3">
+                            <CheckCircle2 className="text-pink-500 w-4.5 h-4.5 mt-0.5 flex-shrink-0" />
+                            <div>
+                              <h4 className="text-xs font-semibold text-gray-800 dark:text-slate-200">Backup automático de base de datos</h4>
+                              <p className="text-[10px] text-gray-500 dark:text-slate-400 mt-0.5 leading-relaxed">Comando vía Artisan para respaldo programable desde el scheduler de Laravel.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Stats */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Controladores</div>
+                            <div className="text-xl font-black text-pink-600 dark:text-pink-400 mt-0.5">4+</div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Suites de tests</div>
+                            <div className="text-xl font-black text-pink-600 dark:text-pink-400 mt-0.5">12</div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Servicios Core</div>
+                            <div className="text-xl font-black text-pink-600 dark:text-pink-400 mt-0.5">2</div>
+                          </div>
+                          <div className="p-3 border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl text-center shadow-sm">
+                            <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Migraciones</div>
+                            <div className="text-xl font-black text-pink-600 dark:text-pink-400 mt-0.5">17</div>
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   )}

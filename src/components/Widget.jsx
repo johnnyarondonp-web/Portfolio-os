@@ -35,7 +35,7 @@ const Widget = () => {
   };
 
   return (
-    <div className="absolute top-8 right-8 w-90 bg-white/40 dark:bg-slate-950/40 backdrop-blur-xl rounded-3xl p-5 border border-white/40 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.4)] hidden lg:block select-none transition-all duration-300 hover:bg-white/50 dark:hover:bg-slate-950/50 z-20">
+    <div className="absolute top-8 right-8 w-80 xl:w-[360px] bg-white/40 dark:bg-slate-950/40 backdrop-blur-xl rounded-3xl p-5 border border-white/40 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.4)] hidden lg:block select-none transition-all duration-300 hover:bg-white/50 dark:hover:bg-slate-950/50 z-20">
 
       {/* Header — sin label "PERFIL HUD", solo icono sutil */}
       <div className="flex items-center gap-2 mb-4 border-b border-black/10 dark:border-white/10 pb-3">
@@ -83,7 +83,7 @@ const Widget = () => {
 
         {/* Description */}
         <p className="text-xs text-gray-800 dark:text-slate-100 leading-relaxed bg-white/60 dark:bg-slate-900/50 p-3 rounded-xl border border-white/50 dark:border-white/10">
-          Construyo sistemas de gestión robustos con Laravel y React  arquitecturas multi-rol, lógica financiera e interfaces modernas. Enfocado en integridad de datos y código mantenible.
+        Soy desarrollador Full Stack con orientación al backend, especializado en Laravel y React. Construyo sistemas complejos desde la arquitectura de BD hasta la UI.
         </p>
 
  

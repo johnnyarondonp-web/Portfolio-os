@@ -16,22 +16,19 @@ const StartMenu = ({ isOpen, onClose, isDarkMode, onShutdown }) => {
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 20, opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="absolute bottom-20 left-1/2 -translate-x-1/2 w-[400px] bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/50 dark:border-white/10 shadow-2xl rounded-2xl overflow-hidden p-6 z-[9999]"
+        className="absolute bottom-20 left-1/2 -translate-x-1/2 w-[min(400px,calc(100vw-32px))] bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/50 dark:border-white/10 shadow-2xl rounded-2xl overflow-hidden p-6 z-[9999]"
       >
         <div className="mb-6">
-          <h2 className="text-sm font-semibold text-gray-800 dark:text-slate-200 mb-4 px-2">Pines</h2>
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-white mb-4 px-2">Pines</h2>
           <div className="grid grid-cols-3 gap-4">
             {appsRegistry.map(app => (
               <div 
                 key={app.id}
-                onClick={() => {
-                  openWindow(app);
-                  onClose();
-                }}
+                onClick={() => { openWindow(app); onClose(); }}
                 className="flex flex-col items-center justify-center p-3 rounded-lg hover:bg-white/50 dark:hover:bg-slate-850/50 cursor-pointer transition-colors"
               >
                 {React.cloneElement(app.icon, { size: 32 })}
-                <span className="text-xs text-gray-700 dark:text-slate-350 mt-2 truncate w-full text-center">{app.title}</span>
+                <span className="text-xs text-gray-700 dark:text-white mt-2 truncate w-full text-center">{app.title}</span>
               </div>
             ))}
           </div>
@@ -45,10 +42,7 @@ const StartMenu = ({ isOpen, onClose, isDarkMode, onShutdown }) => {
             <span className="text-sm font-semibold text-gray-700 dark:text-slate-300">Invitado</span>
           </div>
           <button 
-            onClick={() => {
-              onClose();
-              if (onShutdown) onShutdown();
-            }}
+            onClick={() => { onClose(); if (onShutdown) onShutdown(); }}
             className="p-2 hover:bg-white/50 dark:hover:bg-slate-800/50 rounded-lg transition-colors cursor-pointer"
           >
             <Power size={18} className="text-gray-600 dark:text-slate-400" />
