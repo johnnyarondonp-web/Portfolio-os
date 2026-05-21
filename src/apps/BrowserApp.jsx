@@ -6,6 +6,9 @@ import {
   Layers, Cpu, BookOpen, ExternalLink,
   ChevronRight, MapPin, CheckCircle2, Zap, Shield, Palette
 } from 'lucide-react';
+import heroImg from '../assets/hero.png';
+import zoionPreview from '../assets/zoion-preview.png';
+import eunoiaPreview from '../assets/eunoia-preview.png';
 
 /* ─── 3D Tilt card ─── */
 const TiltCard = ({ children, className }) => {
@@ -134,7 +137,7 @@ const AboutPage = () => {
             className="relative w-24 h-24 rounded-3xl overflow-hidden bg-white/20 border-2 border-white/30 flex-shrink-0 flex items-center justify-center shadow-2xl"
           >
             <img
-              src="/johnny.jpg"
+              src={heroImg}
               alt="Johnny Rondón"
               className="w-full h-full object-cover"
               onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
@@ -564,7 +567,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                         {/* Screenshot Wrapper */}
                         <div className="absolute top-[28px] left-0 w-full h-[calc(100%-28px)] overflow-hidden">
                           <img
-                            src="/src/assets/zoion-preview.png"
+                            src={zoionPreview}
                             alt="Zoion preview"
                             className="w-full h-auto object-top transition-transform duration-[4000ms] ease-in-out group-hover:-translate-y-[calc(100%-212px)]"
                           />
@@ -622,7 +625,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                         {/* Screenshot Wrapper */}
                         <div className="absolute top-[28px] left-0 w-full h-[calc(100%-28px)] overflow-hidden">
                           <img
-                            src="/src/assets/eunoia-preview.png"
+                            src={eunoiaPreview}
                             alt="Eunoia preview"
                             className="w-full h-auto object-top transition-transform duration-[4000ms] ease-in-out group-hover:-translate-y-[calc(100%-212px)]"
                           />
@@ -683,7 +686,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                         </div>
                         {/* Scrollable image container */}
                         <div className="w-full max-h-[600px] overflow-y-auto bg-slate-100 dark:bg-slate-950 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-track]:bg-transparent">
-                          <img src="/src/assets/zoion-preview.png" alt="Zoion Completo" className="w-full h-auto block" />
+                          <img src={zoionPreview} alt="Zoion Completo" className="w-full h-auto block" />
                         </div>
                       </div>
                       {/* Header */}
@@ -733,7 +736,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                         </div>
                         {/* Scrollable image container */}
                         <div className="w-full max-h-[600px] overflow-y-auto bg-slate-100 dark:bg-slate-950 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-600 [&::-webkit-scrollbar-track]:bg-transparent">
-                          <img src="/src/assets/eunoia-preview.png" alt="Eunoia Completo" className="w-full h-auto block" />
+                          <img src={eunoiaPreview} alt="Eunoia Completo" className="w-full h-auto block" />
                         </div>
                       </div>
                       <div className="flex items-start justify-between">

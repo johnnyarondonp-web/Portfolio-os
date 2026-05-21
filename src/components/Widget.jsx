@@ -2,6 +2,7 @@ import React from 'react';
 import { useWindows } from '../context/WindowContext';
 import { appsRegistry } from '../utils/appsRegistry';
 import { User, Code2, MapPin, Briefcase, ExternalLink } from 'lucide-react';
+import heroImg from '../assets/hero.png';
 
 const GithubIcon = ({ size = 16, className }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -47,7 +48,7 @@ const Widget = () => {
         <div className="flex gap-4">
           <div className="relative w-18 h-18 rounded-2xl overflow-hidden bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 shadow-md border border-white/50 dark:border-white/10 flex-shrink-0 flex items-center justify-center">
             <img
-              src="/johnny.jpg"
+              src={heroImg}
               alt="Johnny Rondón"
               className="w-full h-full object-cover"
               onError={(e) => {
