@@ -82,39 +82,39 @@ const Widget = () => {
 
         {/* Description */}
         <p className="text-xs text-gray-800 dark:text-slate-100 leading-relaxed bg-white/60 dark:bg-slate-900/50 p-3 rounded-xl border border-white/50 dark:border-white/10">
-          Construyo sistemas de gestión robustos con Laravel y React — arquitecturas multi-rol, lógica financiera e interfaces modernas. Enfocado en integridad de datos y código mantenible.
+          Construyo sistemas de gestión robustos con Laravel y React  arquitecturas multi-rol, lógica financiera e interfaces modernas. Enfocado en integridad de datos y código mantenible.
         </p>
 
  
 
         {/* Social icons */}
-        <div className="flex justify-center items-center gap-2.5 pt-2 border-t border-black/10 dark:border-white/10">
+        <div className="flex justify-center items-center gap-3 pt-2 border-t border-black/10 dark:border-white/10">
           <a
             href="https://github.com/johnnyarondonp-web/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/60 hover:bg-white dark:bg-slate-900/40 dark:hover:bg-slate-900/80 border border-white/50 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+            className="w-10 h-10 rounded-xl bg-white/60 hover:bg-white dark:bg-slate-900/40 dark:hover:bg-slate-900/80 border border-white/50 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
             title="GitHub"
           >
-            <GithubIcon size={16} />
+            <GithubIcon size={20} />
           </a>
           <a
             href="https://www.linkedin.com/in/johnny-rond%C3%B3n-9064962b8/"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/60 hover:bg-white dark:bg-slate-900/40 dark:hover:bg-slate-900/80 border border-white/50 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+            className="w-10 h-10 rounded-xl bg-white/60 hover:bg-white dark:bg-slate-900/40 dark:hover:bg-slate-900/80 border border-white/50 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
             title="LinkedIn"
           >
-            <LinkedinIcon size={16} />
+            <LinkedinIcon size={20} />
           </a>
           <a
             href="https://mail.google.com/mail/?view=cm&fs=1&to=johnnyarondonp@gmail.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/60 hover:bg-white dark:bg-slate-900/40 dark:hover:bg-slate-900/80 border border-white/50 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+            className="w-10 h-10 rounded-xl bg-white/60 hover:bg-white dark:bg-slate-900/40 dark:hover:bg-slate-900/80 border border-white/50 dark:border-white/10 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
             title="Gmail"
           >
-            <GmailIcon size={16} />
+            <GmailIcon size={20} />
           </a>
         </div>
 

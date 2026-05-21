@@ -1,71 +1,41 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useWindows } from '../context/WindowContext';
 import { appsRegistry } from '../utils/appsRegistry';
 import Widget from './Widget';
 
+// Grid cell size — must match icon container (w-24 = 96px)
 const CELL_W = 100;
 const CELL_H = 110;
 const PADDING_X = 24;
 const PADDING_Y = 24;
+const COLS = 2; // max columns before wrapping right
 
-/**
- * Convert pixel coords to grid cell [col, row]
- */
-const pixelToCell = (x, y) => {
+/** Convert a flat index to a grid { x, y } position */
+const indexToGrid = (index) => {
+  const row = index % 5;        // column-major: fill rows first per column
+  const col = Math.floor(index / 5);
+  return {
+    x: PADDING_X + col * CELL_W,
+    y: PADDING_Y + row * CELL_H,
+  };
+};
+
+/** Snap any { x, y } to the nearest grid cell */
+const snapToGrid = (x, y, desktopW, desktopH) => {
   const col = Math.round((x - PADDING_X) / CELL_W);
   const row = Math.round((y - PADDING_Y) / CELL_H);
-  return [Math.max(0, col), Math.max(0, row)];
-};
 
-/**
- * Convert grid cell [col, row] to pixel coords
- */
-const cellToPixel = (col, row) => ({
-  x: PADDING_X + col * CELL_W,
-  y: PADDING_Y + row * CELL_H,
-});
+  const maxCol = Math.floor((desktopW - PADDING_X - 96) / CELL_W);
+  const maxRow = Math.floor((desktopH - PADDING_Y - 96) / CELL_H);
 
-/**
- * Build the canonical default grid layout:
- * fills column-major (top→bottom, then next column)
- * Order is guaranteed by appsRegistry index.
- */
-const buildDefaultLayout = () => {
-  const layout = {}; // { appId: [col, row] }
-  appsRegistry.forEach((app, index) => {
-    const row = index % 5;
-    const col = Math.floor(index / 5);
-    layout[app.id] = [col, row];
-  });
-  return layout;
-};
+  const clampedCol = Math.max(0, Math.min(col, maxCol));
+  const clampedRow = Math.max(0, Math.min(row, maxRow));
 
-/**
- * Find the nearest FREE cell to [targetCol, targetRow],
- * expanding outward in a spiral until an empty cell is found.
- */
-const findNearestFreeCell = (targetCol, targetRow, occupiedCells, maxCol, maxRow) => {
-  const key = (c, r) => `${c},${r}`;
-  const occupied = new Set(Object.values(occupiedCells).map(([c, r]) => key(c, r)));
-
-  if (!occupied.has(key(targetCol, targetRow))) {
-    return [targetCol, targetRow];
-  }
-
-  // BFS outward
-  for (let radius = 1; radius <= Math.max(maxCol, maxRow) + 1; radius++) {
-    for (let dc = -radius; dc <= radius; dc++) {
-      for (let dr = -radius; dr <= radius; dr++) {
-        if (Math.abs(dc) !== radius && Math.abs(dr) !== radius) continue; // only border
-        const c = targetCol + dc;
-        const r = targetRow + dr;
-        if (c < 0 || r < 0 || c > maxCol || r > maxRow) continue;
-        if (!occupied.has(key(c, r))) return [c, r];
-      }
-    }
-  }
-  return [targetCol, targetRow];
+  return {
+    x: PADDING_X + clampedCol * CELL_W,
+    y: PADDING_Y + clampedRow * CELL_H,
+  };
 };
 
 const DesktopIcon = ({ app, onDoubleClick, isSelected, onClick, position, onDragEnd, dragConstraints }) => {
@@ -110,46 +80,38 @@ const Desktop = ({ children, isDarkMode }) => {
   const [selectedAppId, setSelectedAppId] = useState(null);
   const desktopRef = useRef(null);
 
-  /**
-   * State: { appId: [col, row] }
-   * On every fresh page load we ALWAYS reset to the default layout
-   * (no localStorage persistence for order, per requirement).
-   */
-  const [cellLayout, setCellLayout] = useState(() => buildDefaultLayout());
-
-  // Derive pixel positions from cell layout
-  const positions = Object.fromEntries(
-    Object.entries(cellLayout).map(([id, [col, row]]) => [id, cellToPixel(col, row)])
-  );
+  const [positions, setPositions] = useState(() => {
+    const saved = localStorage.getItem('desktop_icon_positions_v3');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const allPresent = appsRegistry.every(app => parsed[app.id] !== undefined);
+        if (allPresent) return parsed;
+      } catch (e) {}
+    }
+    // Default grid positions
+    const initial = {};
+    appsRegistry.forEach((app, index) => {
+      initial[app.id] = indexToGrid(index);
+    });
+    return initial;
+  });
 
   const handleDragEnd = useCallback((appId, point) => {
     const desktop = desktopRef.current;
     if (!desktop) return;
 
     const rect = desktop.getBoundingClientRect();
+    // Convert pointer coordinates to desktop-local coordinates
     const localX = point.x - rect.left;
     const localY = point.y - rect.top;
 
-    const maxCol = Math.floor((rect.width - PADDING_X - 96) / CELL_W);
-    const maxRow = Math.floor((rect.height - 80 - PADDING_Y - 96) / CELL_H);
+    const snapped = snapToGrid(localX, localY, rect.width, rect.height - 80);
 
-    // Clamp within bounds
-    const clampedX = Math.max(PADDING_X, Math.min(localX, PADDING_X + maxCol * CELL_W));
-    const clampedY = Math.max(PADDING_Y, Math.min(localY, PADDING_Y + maxRow * CELL_H));
-
-    const [targetCol, targetRow] = pixelToCell(clampedX, clampedY);
-
-    setCellLayout(prev => {
-      // Layout without the dragged app (so its old cell is free)
-      const others = Object.fromEntries(
-        Object.entries(prev).filter(([id]) => id !== appId)
-      );
-
-      const [freeCol, freeRow] = findNearestFreeCell(
-        targetCol, targetRow, others, maxCol, maxRow
-      );
-
-      return { ...others, [appId]: [freeCol, freeRow] };
+    setPositions(prev => {
+      const updated = { ...prev, [appId]: snapped };
+      localStorage.setItem('desktop_icon_positions_v3', JSON.stringify(updated));
+      return updated;
     });
   }, []);
 
@@ -173,7 +135,7 @@ const Desktop = ({ children, isDarkMode }) => {
             key={app.id}
             app={app}
             isSelected={selectedAppId === app.id}
-            position={positions[app.id] || cellToPixel(0, 0)}
+            position={positions[app.id] || indexToGrid(0)}
             onDragEnd={handleDragEnd}
             dragConstraints={desktopRef}
             onClick={(app) => {

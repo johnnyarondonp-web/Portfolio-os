@@ -103,7 +103,7 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
       {/* Floating System Tray & Clock Pill */}
       <div className="absolute bottom-5 right-5 h-14 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-2xl flex items-center gap-3 px-4 z-[9000] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.12),0_0_0_1px_rgba(255,255,255,0.24)_inset] hover:bg-white/75 dark:hover:bg-slate-900/75 hover:shadow-md transition-all duration-300 select-none cursor-pointer">
         {/* System status icons & dark mode toggle */}
-        <div className="flex items-center gap-2.5 text-gray-600 dark:text-slate-350">
+        <div className="flex items-center gap-2.5 text-gray-600 dark:text-white">
           <div className="p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors flex items-center justify-center">
             <Wifi size={14} className="hover:text-blue-500 transition-colors" />
           </div>
@@ -136,10 +136,10 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
         
         {/* Stacked Date / Time */}
         <div className="flex flex-col items-end leading-none py-0.5">
-          <span className="font-semibold tracking-wide text-gray-800 dark:text-slate-200 text-xs">
+          <span className="font-semibold tracking-wide text-gray-800 dark:text-white text-xs">
             {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
-          <span className="text-[10px] text-gray-500 dark:text-slate-400 font-normal mt-0.5">
+          <span className="text-[10px] text-gray-500 dark:text-white/80 font-normal mt-0.5">
             {time.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
           </span>
         </div>

@@ -12,18 +12,18 @@ export const appsRegistry = [
     defaultSize: { width: 800, height: 550 },
   },
   {
-    id: 'skills',
-    title: 'Skills',
-    icon: <Code2 size={40} className="text-teal-500 dark:text-teal-400" />,
-    component: <BrowserApp initialTab="skills" />,
-    defaultSize: { width: 800, height: 550 },
-  },
-  {
     id: 'projects',
     title: 'Proyectos',
     icon: <FolderKanban size={40} className="text-amber-500 dark:text-amber-400" />,
     component: <BrowserApp initialTab="projects" />,
     defaultSize: { width: 850, height: 580 },
+  },
+  {
+    id: 'skills',
+    title: 'Skills',
+    icon: <Code2 size={40} className="text-teal-500 dark:text-teal-400" />,
+    component: <BrowserApp initialTab="skills" />,
+    defaultSize: { width: 800, height: 550 },
   },
   {
     id: 'contact',
