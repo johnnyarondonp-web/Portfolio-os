@@ -387,7 +387,7 @@ const ContactTab = ({ isDarkMode }) => {
   ];
 
   return (
-    <div className="flex flex-col h-full justify-center gap-4 py-4">
+    <div className="flex flex-col justify-center gap-4 py-8">
       <div className="text-center mb-2">
         <h2 className={`text-xl font-black ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Contacto</h2>
         <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>Hablemos sobre tu próximo proyecto</p>
@@ -427,7 +427,10 @@ const MobileLayout = ({ isDarkMode, setIsDarkMode }) => {
   const navBg = isDarkMode ? 'bg-slate-900/95 border-slate-800' : 'bg-white/95 border-gray-200';
 
   return (
-    <div className={`flex flex-col w-full h-full ${bg} overflow-hidden`}>
+    <div
+      className={`flex flex-col w-full ${bg}`}
+      style={{ height: '100dvh', overflow: 'hidden' }}
+    >
       {/* Status Bar */}
       <div className={`flex-shrink-0 flex items-center justify-between px-5 py-2 ${statusBg} border-b backdrop-blur-xl z-50`}>
         <span className={`text-xs font-bold ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
@@ -439,8 +442,11 @@ const MobileLayout = ({ isDarkMode, setIsDarkMode }) => {
         </button>
       </div>
 
-      {/* Content Area */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4 overscroll-none">
+      {/* Content Area — padding-bottom keeps content above the fixed nav */}
+      <div
+        className="flex-1 overflow-y-auto overflow-x-hidden px-4 pt-4"
+        style={{ paddingBottom: 'calc(72px + env(safe-area-inset-bottom, 0px))' }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -457,17 +463,26 @@ const MobileLayout = ({ isDarkMode, setIsDarkMode }) => {
         </AnimatePresence>
       </div>
 
-      {/* Bottom Navigation */}
-      <div className={`flex-shrink-0 flex items-center justify-around px-2 py-2 ${navBg} border-t backdrop-blur-xl safe-area-bottom`}>
+      {/* Bottom Navigation — fixed to bottom with safe-area support */}
+      <div
+        className={`flex-shrink-0 flex items-center justify-around px-2 ${navBg} border-t backdrop-blur-xl z-50`}
+        style={{
+          paddingTop: '8px',
+          paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))',
+        }}
+      >
         {tabs.map(tab => {
           const active = activeTab === tab.id;
           return (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
               className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-2xl transition-all duration-200 min-w-0 flex-1 ${
                 active
                   ? 'bg-blue-500/10 text-blue-500'
                   : isDarkMode ? 'text-slate-500' : 'text-gray-400'
-              }`}>
+              }`}
+            >
               <div className={`transition-transform duration-200 ${active ? 'scale-110' : ''}`}>{tab.icon}</div>
               <span className={`text-[10px] font-bold transition-all duration-200 truncate w-full text-center ${active ? 'opacity-100' : 'opacity-60'}`}>{tab.label}</span>
               {active && <div className="w-4 h-0.5 bg-blue-500 rounded-full mt-0.5"/>}
