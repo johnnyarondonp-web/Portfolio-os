@@ -9,8 +9,12 @@ const CELL_H = 110;
 const PADDING_X = 24;
 const PADDING_Y = 24;
 
+// Umbral mínimo de movimiento en px para considerar que hubo un drag real
+const DRAG_THRESHOLD = 12;
+
 /**
- * Convert pixel coords to grid cell [col, row]
+ * Convierte coordenadas en píxeles (relativas al desktop) a celda [col, row]
+ * El punto de referencia es la esquina superior-izquierda del ícono (96×96 px)
  */
 const pixelToCell = (x, y) => {
   const col = Math.round((x - PADDING_X) / CELL_W);
@@ -19,7 +23,7 @@ const pixelToCell = (x, y) => {
 };
 
 /**
- * Convert grid cell [col, row] to pixel coords
+ * Convierte celda [col, row] a coordenadas de píxeles (top-left del ícono)
  */
 const cellToPixel = (col, row) => ({
   x: PADDING_X + col * CELL_W,
@@ -27,65 +31,250 @@ const cellToPixel = (col, row) => ({
 });
 
 /**
- * Build the canonical default grid layout:
- * fills column-major (top→bottom, then next column)
- * Order is guaranteed by appsRegistry index.
+ * Layout inicial: column-major, igual a Windows.
+ * Garantiza que no haya dos íconos en la misma celda.
  */
-const buildDefaultLayout = () => {
-  const layout = {}; // { appId: [col, row] }
+const buildDefaultLayout = (maxRows = 8) => {
+  const layout = {};
+  const occupied = new Set();
+
   appsRegistry.forEach((app, index) => {
-    const row = index % 5;
-    const col = Math.floor(index / 5);
+    let col = Math.floor(index / maxRows);
+    let row = index % maxRows;
+
+    // Buscar la primera celda libre empezando por la posición natural
+    while (occupied.has(`${col},${row}`)) {
+      row++;
+      if (row >= maxRows) {
+        row = 0;
+        col++;
+      }
+    }
+
+    occupied.add(`${col},${row}`);
     layout[app.id] = [col, row];
   });
+
   return layout;
 };
 
 /**
- * Find the nearest FREE cell to [targetCol, targetRow],
- * expanding outward in a spiral until an empty cell is found.
+ * Calcula cuántas filas caben en el área visible del desktop.
  */
-const findNearestFreeCell = (targetCol, targetRow, occupiedCells, maxCol, maxRow) => {
-  const key = (c, r) => `${c},${r}`;
-  const occupied = new Set(Object.values(occupiedCells).map(([c, r]) => key(c, r)));
+const getMaxRows = (desktopHeight) => {
+  const usableHeight = desktopHeight - PADDING_Y - 80; // 80 = taskbar
+  return Math.max(1, Math.floor(usableHeight / CELL_H));
+};
 
-  if (!occupied.has(key(targetCol, targetRow))) {
-    return [targetCol, targetRow];
-  }
+/**
+ * Dado un target [col, row], busca la celda libre más cercana
+ * usando la misma prioridad que Windows: mismo col hacia abajo,
+ * luego col+1, col+2, etc.
+ */
+const findNearestFreeCell = (targetCol, targetRow, others, maxCol, maxRow) => {
+  const occupied = new Set(
+    Object.values(others).map(([c, r]) => `${c},${r}`)
+  );
 
-  // BFS outward
-  for (let radius = 1; radius <= Math.max(maxCol, maxRow) + 1; radius++) {
+  const free = (c, r) =>
+    c >= 0 && r >= 0 && c <= maxCol && r <= maxRow && !occupied.has(`${c},${r}`);
+
+  // Mismo col, misma fila
+  if (free(targetCol, targetRow)) return [targetCol, targetRow];
+
+  // Búsqueda en espiral cuadrada creciente
+  for (let radius = 1; radius <= Math.max(maxCol, maxRow) * 2; radius++) {
     for (let dc = -radius; dc <= radius; dc++) {
       for (let dr = -radius; dr <= radius; dr++) {
-        if (Math.abs(dc) !== radius && Math.abs(dr) !== radius) continue; // only border
+        if (Math.abs(dc) !== radius && Math.abs(dr) !== radius) continue; // solo borde
         const c = targetCol + dc;
         const r = targetRow + dr;
-        if (c < 0 || r < 0 || c > maxCol || r > maxRow) continue;
-        if (!occupied.has(key(c, r))) return [c, r];
+        if (free(c, r)) return [c, r];
       }
     }
   }
-  return [targetCol, targetRow];
+
+  return [targetCol, targetRow]; // fallback
 };
 
-const DesktopIcon = ({ app, onDoubleClick, isSelected, onClick, position, onDragEnd, dragConstraints }) => {
+// ---------------------------------------------------------------------------
+// DesktopIcon — el drag real se hace con position absolute + mouse events
+// para evitar el conflicto entre dragConstraints y animate de framer-motion.
+// ---------------------------------------------------------------------------
+const DesktopIcon = ({
+  app,
+  isSelected,
+  onClick,
+  onDoubleClick,
+  position,
+  onDragEnd,
+  desktopRef,
+}) => {
+  const isDragging = useRef(false);
+  const dragStartMouse = useRef({ x: 0, y: 0 });
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const [livePos, setLivePos] = useState(null); // posición en vivo durante drag
+
+  // Sincronizar livePos cuando cambia la posición de celda (snap animado)
+  useEffect(() => {
+    if (!isDragging.current) {
+      setLivePos(null); // limpiar para que el componente use `position`
+    }
+  }, [position]);
+
+  const displayPos = livePos ?? position;
+
+  const handleMouseDown = useCallback(
+    (e) => {
+      if (e.button !== 0) return;
+      e.stopPropagation();
+
+      isDragging.current = false;
+      dragStartMouse.current = { x: e.clientX, y: e.clientY };
+      dragStartPos.current = { ...position };
+
+      const onMouseMove = (moveEvt) => {
+        const dx = moveEvt.clientX - dragStartMouse.current.x;
+        const dy = moveEvt.clientY - dragStartMouse.current.y;
+
+        if (!isDragging.current) {
+          if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+          isDragging.current = true;
+        }
+
+        const desktop = desktopRef.current;
+        if (!desktop) return;
+        const rect = desktop.getBoundingClientRect();
+
+        const rawX = dragStartPos.current.x + dx;
+        const rawY = dragStartPos.current.y + dy;
+
+        // Clamp dentro del área del desktop
+        const clampedX = Math.max(0, Math.min(rawX, rect.width - 96));
+        const clampedY = Math.max(0, Math.min(rawY, rect.height - 96 - 80));
+
+        setLivePos({ x: clampedX, y: clampedY });
+      };
+
+      const onMouseUp = (upEvt) => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+
+        if (!isDragging.current) {
+          // Fue un click
+          isDragging.current = false;
+          return;
+        }
+
+        isDragging.current = false;
+
+        const desktop = desktopRef.current;
+        if (!desktop) return;
+        const rect = desktop.getBoundingClientRect();
+
+        const dx = upEvt.clientX - dragStartMouse.current.x;
+        const dy = upEvt.clientY - dragStartMouse.current.y;
+        const rawX = dragStartPos.current.x + dx;
+        const rawY = dragStartPos.current.y + dy;
+        const clampedX = Math.max(0, Math.min(rawX, rect.width - 96));
+        const clampedY = Math.max(0, Math.min(rawY, rect.height - 96 - 80));
+
+        setLivePos(null); // limpiar posición en vivo; onDragEnd pondrá la correcta
+        onDragEnd(app.id, clampedX, clampedY, rect);
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    },
+    [app.id, position, onDragEnd, desktopRef]
+  );
+
+  // Touch support
+  const handleTouchStart = useCallback(
+    (e) => {
+      const touch = e.touches[0];
+      isDragging.current = false;
+      dragStartMouse.current = { x: touch.clientX, y: touch.clientY };
+      dragStartPos.current = { ...position };
+
+      const onTouchMove = (moveEvt) => {
+        const t = moveEvt.touches[0];
+        const dx = t.clientX - dragStartMouse.current.x;
+        const dy = t.clientY - dragStartMouse.current.y;
+
+        if (!isDragging.current) {
+          if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+          isDragging.current = true;
+        }
+
+        moveEvt.preventDefault();
+
+        const desktop = desktopRef.current;
+        if (!desktop) return;
+        const rect = desktop.getBoundingClientRect();
+
+        const rawX = dragStartPos.current.x + dx;
+        const rawY = dragStartPos.current.y + dy;
+        const clampedX = Math.max(0, Math.min(rawX, rect.width - 96));
+        const clampedY = Math.max(0, Math.min(rawY, rect.height - 96 - 80));
+        setLivePos({ x: clampedX, y: clampedY });
+      };
+
+      const onTouchEnd = (upEvt) => {
+        document.removeEventListener('touchmove', onTouchMove);
+        document.removeEventListener('touchend', onTouchEnd);
+
+        if (!isDragging.current) return;
+        isDragging.current = false;
+
+        const lastTouch = upEvt.changedTouches[0];
+        const desktop = desktopRef.current;
+        if (!desktop) return;
+        const rect = desktop.getBoundingClientRect();
+
+        const dx = lastTouch.clientX - dragStartMouse.current.x;
+        const dy = lastTouch.clientY - dragStartMouse.current.y;
+        const rawX = dragStartPos.current.x + dx;
+        const rawY = dragStartPos.current.y + dy;
+        const clampedX = Math.max(0, Math.min(rawX, rect.width - 96));
+        const clampedY = Math.max(0, Math.min(rawY, rect.height - 96 - 80));
+
+        setLivePos(null);
+        onDragEnd(app.id, clampedX, clampedY, rect);
+      };
+
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    },
+    [app.id, position, onDragEnd, desktopRef]
+  );
+
   return (
     <motion.div
-      drag
-      dragMomentum={false}
-      dragElastic={0}
-      dragConstraints={dragConstraints}
-      onDragEnd={(event, info) => onDragEnd(app.id, info.point)}
-      animate={{ x: position.x, y: position.y }}
-      transition={{ type: 'spring', stiffness: 400, damping: 35, duration: 0.15 }}
-      style={{ position: 'absolute', left: 0, top: 0 }}
-      className={`pointer-events-auto flex flex-col items-center justify-center w-24 h-24 p-2 rounded-2xl cursor-pointer transition-colors duration-300 select-none group z-50
+      animate={{ x: livePos ? livePos.x : displayPos.x, y: livePos ? livePos.y : displayPos.y }}
+      transition={
+        livePos
+          ? { duration: 0 } // mientras arrastra: sin spring
+          : { type: 'spring', stiffness: 500, damping: 40 } // al soltar: snap animado
+      }
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        zIndex: livePos ? 100 : 10,
+        cursor: livePos ? 'grabbing' : 'pointer',
+      }}
+      className={`pointer-events-auto flex flex-col items-center justify-center w-24 h-24 p-2 rounded-2xl select-none group
         ${isSelected
-          ? 'bg-white/10 border border-white/20 shadow-[0_4px_12px_rgba(0,0,0,0.1),inset_0_1px_2px_rgba(255,255,255,0.15)] scale-[0.98]'
-          : 'border border-transparent hover:bg-white/10 hover:border-white/10 hover:shadow-sm'}`}
+          ? 'bg-white/10 border-2 border-blue-400/60 shadow-[0_4px_12px_rgba(59,130,246,0.3),inset_0_1px_2px_rgba(255,255,255,0.15)]'
+          : 'border border-transparent hover:bg-white/10 hover:border-white/10 hover:shadow-sm'}
+        ${livePos ? 'opacity-90 scale-105' : 'opacity-100 scale-100'}
+      `}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       onClick={(e) => {
         e.stopPropagation();
-        onClick(app);
+        if (!isDragging.current) onClick(app);
       }}
       onDoubleClick={(e) => {
         e.stopPropagation();
@@ -96,7 +285,7 @@ const DesktopIcon = ({ app, onDoubleClick, isSelected, onClick, position, onDrag
         {app.icon}
       </div>
       <span
-        className="mt-2 text-xs text-white font-medium text-center drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] line-clamp-2 max-w-full px-1"
+        className="mt-2 text-xs text-white font-medium text-center line-clamp-2 max-w-full px-1"
         style={{ textShadow: '0px 1px 2px rgba(0,0,0,0.8)' }}
       >
         {app.title}
@@ -105,51 +294,74 @@ const DesktopIcon = ({ app, onDoubleClick, isSelected, onClick, position, onDrag
   );
 };
 
+// ---------------------------------------------------------------------------
+// Desktop
+// ---------------------------------------------------------------------------
 const Desktop = ({ children, isDarkMode }) => {
   const { openWindow } = useWindows();
   const [selectedAppId, setSelectedAppId] = useState(null);
   const desktopRef = useRef(null);
 
-  /**
-   * State: { appId: [col, row] }
-   * On every fresh page load we ALWAYS reset to the default layout
-   * (no localStorage persistence for order, per requirement).
-   */
+  // Calculamos maxRows dinámicamente según el alto real del desktop
+  const [maxRows, setMaxRows] = useState(8);
+
+  useEffect(() => {
+    const updateMaxRows = () => {
+      if (desktopRef.current) {
+        setMaxRows(getMaxRows(desktopRef.current.clientHeight));
+      }
+    };
+    updateMaxRows();
+    window.addEventListener('resize', updateMaxRows);
+    return () => window.removeEventListener('resize', updateMaxRows);
+  }, []);
+
   const [cellLayout, setCellLayout] = useState(() => buildDefaultLayout());
+
+  // Recalcular layout si cambia maxRows (p.ej. al rotar pantalla)
+  useEffect(() => {
+    setCellLayout(buildDefaultLayout(maxRows));
+  }, [maxRows]);
 
   // Derive pixel positions from cell layout
   const positions = Object.fromEntries(
     Object.entries(cellLayout).map(([id, [col, row]]) => [id, cellToPixel(col, row)])
   );
 
-  const handleDragEnd = useCallback((appId, point) => {
-    const desktop = desktopRef.current;
-    if (!desktop) return;
+  /**
+   * handleDragEnd recibe coordenadas locales (relativas al desktop, top-left del ícono)
+   */
+  const handleDragEnd = useCallback((appId, localX, localY, rect) => {
+    const maxCol = Math.max(0, Math.floor((rect.width - PADDING_X - 96) / CELL_W));
+    const mRows = getMaxRows(rect.height);
 
-    const rect = desktop.getBoundingClientRect();
-    const localX = point.x - rect.left;
-    const localY = point.y - rect.top;
+    const [targetCol, targetRow] = pixelToCell(localX, localY);
+    const clampedCol = Math.max(0, Math.min(targetCol, maxCol));
+    const clampedRow = Math.max(0, Math.min(targetRow, mRows - 1));
 
-    const maxCol = Math.floor((rect.width - PADDING_X - 96) / CELL_W);
-    const maxRow = Math.floor((rect.height - 80 - PADDING_Y - 96) / CELL_H);
+    setCellLayout((prev) => {
+      const originalCell = prev[appId];
 
-    // Clamp within bounds
-    const clampedX = Math.max(PADDING_X, Math.min(localX, PADDING_X + maxCol * CELL_W));
-    const clampedY = Math.max(PADDING_Y, Math.min(localY, PADDING_Y + maxRow * CELL_H));
+      // Misma celda → snap de vuelta sin cambios
+      if (originalCell[0] === clampedCol && originalCell[1] === clampedRow) {
+        return prev;
+      }
 
-    const [targetCol, targetRow] = pixelToCell(clampedX, clampedY);
-
-    setCellLayout(prev => {
-      // Layout without the dragged app (so its old cell is free)
       const others = Object.fromEntries(
         Object.entries(prev).filter(([id]) => id !== appId)
       );
 
-      const [freeCol, freeRow] = findNearestFreeCell(
-        targetCol, targetRow, others, maxCol, maxRow
+      const targetOccupied = Object.values(others).some(
+        ([c, r]) => c === clampedCol && r === clampedRow
       );
 
-      return { ...others, [appId]: [freeCol, freeRow] };
+      if (targetOccupied) {
+        // Buscar celda libre más cercana
+        const [nc, nr] = findNearestFreeCell(clampedCol, clampedRow, others, maxCol, mRows - 1);
+        return { ...others, [appId]: [nc, nr] };
+      }
+
+      return { ...others, [appId]: [clampedCol, clampedRow] };
     });
   }, []);
 
@@ -175,7 +387,7 @@ const Desktop = ({ children, isDarkMode }) => {
             isSelected={selectedAppId === app.id}
             position={positions[app.id] || cellToPixel(0, 0)}
             onDragEnd={handleDragEnd}
-            dragConstraints={desktopRef}
+            desktopRef={desktopRef}
             onClick={(app) => {
               if (selectedAppId === app.id) {
                 setSelectedAppId(null);

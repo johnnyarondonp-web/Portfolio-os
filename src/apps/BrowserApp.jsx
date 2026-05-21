@@ -678,44 +678,6 @@ const BrowserApp = ({ initialTab = 'about' }) => {
 
                   {selectedProject === 'zoion' ? (
                     <motion.div key="zoion-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
-                      {/* Full screenshot */}
-                      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 shadow-lg bg-white dark:bg-slate-900">
-                        {/* Browser Chrome */}
-                        <div className="flex items-center gap-1.5 px-3 h-[32px] bg-gradient-to-b from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border-b border-gray-300 dark:border-slate-700">
-                          <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
-                          <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
-                          <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]" />
-                          <div className="flex-1 flex justify-center ml-[-48px]">
-                            <span className="bg-white/60 dark:bg-slate-950/40 rounded-md text-[10px] text-gray-600 dark:text-gray-300 px-6 py-0.5 font-mono shadow-sm border border-gray-200/50 dark:border-slate-700/50 tracking-wide">zoion.app / inicio</span>
-                          </div>
-                        </div>
-                        {/* Scrollable image container */}
-                        <div className="w-full bg-slate-100 dark:bg-slate-950">
-                          <div className="p-4 sm:p-6 md:p-10 space-y-6 md:space-y-8 max-w-5xl mx-auto">
-                            <img src={zoionPreview} alt="Zoion Completo" className="w-full h-auto block rounded-xl shadow-md border border-gray-200 dark:border-slate-800" />
-                            
-                            {/* Extra Captures */}
-                            <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
-                              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
-                              
-                              {/* Grid for Mobile images */}
-                              <div className="grid grid-cols-2 gap-4">
-                                <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                                  <img src={zoionMobile1} alt="Zoion Mobile App" className="w-full h-auto block" />
-                                </div>
-                                <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                                  <img src={zoionMobile2} alt="Zoion Mobile Calendar" className="w-full h-auto block" />
-                                </div>
-                              </div>
-                              
-                              {/* Admin Dashboard image */}
-                              <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                                <img src={zoionAdmin} alt="Zoion Admin Dashboard" className="w-full h-auto block" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                       {/* Header */}
                       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div className="space-y-1">
@@ -735,6 +697,26 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                         </a>
                       </div>
                       <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed">Plataforma ERP integral para clínicas veterinarias con portal público, médicos, clientes y administración centralizada.</p>
+                      
+                      {/* Full screenshot */}
+                      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 shadow-lg bg-white dark:bg-slate-900">
+                        {/* Browser Chrome */}
+                        <div className="flex items-center gap-1.5 px-3 h-[32px] bg-gradient-to-b from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border-b border-gray-300 dark:border-slate-700">
+                          <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
+                          <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
+                          <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]" />
+                          <div className="flex-1 flex justify-center ml-[-48px]">
+                            <span className="bg-white/60 dark:bg-slate-950/40 rounded-md text-[10px] text-gray-600 dark:text-gray-300 px-6 py-0.5 font-mono shadow-sm border border-gray-200/50 dark:border-slate-700/50 tracking-wide">zoion.app / inicio</span>
+                          </div>
+                        </div>
+                        {/* Scrollable image container */}
+                        <div className="w-full bg-slate-100 dark:bg-slate-950">
+                          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+                            <img src={zoionPreview} alt="Zoion Completo" className="w-full h-auto block rounded-xl shadow-md border border-gray-200 dark:border-slate-800" />
+                          </div>
+                        </div>
+                      </div>
+                      
                       {/* Features */}
                       <div className="space-y-4">
                         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Lógica de Negocio Destacada</h3>
@@ -789,40 +771,26 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                           </div>
                         </div>
                       </div>
+                      
+                      {/* Capturas Adicionales */}
+                      <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                            <img src={zoionMobile1} alt="Zoion Mobile App" className="w-full h-auto block" />
+                          </div>
+                          <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                            <img src={zoionMobile2} alt="Zoion Mobile Calendar" className="w-full h-auto block" />
+                          </div>
+                        </div>
+                        <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                          <img src={zoionAdmin} alt="Zoion Admin Dashboard" className="w-full h-auto block" />
+                        </div>
+                      </div>
                     </motion.div>
                   ) : (
                     <motion.div key="eunoia-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
-                      {/* Full screenshot */}
-                      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 shadow-lg bg-white dark:bg-slate-900">
-                        {/* Browser Chrome */}
-                        <div className="flex items-center gap-1.5 px-3 h-[32px] bg-gradient-to-b from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border-b border-gray-300 dark:border-slate-700">
-                          <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
-                          <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
-                          <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]" />
-                          <div className="flex-1 flex justify-center ml-[-48px]">
-                            <span className="bg-white/60 dark:bg-slate-950/40 rounded-md text-[10px] text-gray-600 dark:text-gray-300 px-6 py-0.5 font-mono shadow-sm border border-gray-200/50 dark:border-slate-700/50 tracking-wide">eunoia.erp / dashboard</span>
-                          </div>
-                        </div>
-                        {/* Scrollable image container */}
-                        <div className="w-full bg-slate-100 dark:bg-slate-950">
-                          <div className="p-4 sm:p-6 md:p-10 space-y-6 md:space-y-8 max-w-5xl mx-auto">
-                            <img src={eunoiaPreview} alt="Eunoia Completo" className="w-full h-auto block rounded-xl shadow-md border border-gray-200 dark:border-slate-800" />
-                            
-                            {/* Extra Captures */}
-                            <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
-                              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
-                              
-                              {/* Extra Images */}
-                              <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                                <img src={eunoiaBalance} alt="Eunoia Balance y Rentabilidad" className="w-full h-auto block" />
-                              </div>
-                              <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
-                                <img src={eunoiaVentas} alt="Eunoia Registro de Ventas" className="w-full h-auto block" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      {/* Header */}
                       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div className="space-y-1">
                           <span className="text-[10px] font-black uppercase tracking-wider text-pink-600 bg-pink-50 dark:bg-pink-900/30 px-2 py-0.5 rounded-full inline-block">Finanzas / ERP</span>
@@ -841,6 +809,25 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                         </a>
                       </div>
                       <p className="text-sm text-gray-600 dark:text-slate-300 leading-relaxed">ERP de vanguardia para retail: inventarios, ventas multimoneda, facturación con tasa BCV y balances de sucursales.</p>
+                      
+                      {/* Full screenshot */}
+                      <div className="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 shadow-lg bg-white dark:bg-slate-900">
+                        {/* Browser Chrome */}
+                        <div className="flex items-center gap-1.5 px-3 h-[32px] bg-gradient-to-b from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-900 border-b border-gray-300 dark:border-slate-700">
+                          <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
+                          <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
+                          <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]" />
+                          <div className="flex-1 flex justify-center ml-[-48px]">
+                            <span className="bg-white/60 dark:bg-slate-950/40 rounded-md text-[10px] text-gray-600 dark:text-gray-300 px-6 py-0.5 font-mono shadow-sm border border-gray-200/50 dark:border-slate-700/50 tracking-wide">eunoia.erp / dashboard</span>
+                          </div>
+                        </div>
+                        {/* Scrollable image container */}
+                        <div className="w-full bg-slate-100 dark:bg-slate-950">
+                          <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto">
+                            <img src={eunoiaPreview} alt="Eunoia Completo" className="w-full h-auto block rounded-xl shadow-md border border-gray-200 dark:border-slate-800" />
+                          </div>
+                        </div>
+                      </div>
                       
                       {/* Features */}
                       <div className="space-y-4">
@@ -901,6 +888,17 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                             <div className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500">Migraciones</div>
                             <div className="text-xl font-black text-pink-600 dark:text-pink-400 mt-0.5">17</div>
                           </div>
+                        </div>
+                      </div>
+                      
+                      {/* Capturas Adicionales */}
+                      <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
+                        <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                          <img src={eunoiaBalance} alt="Eunoia Balance y Rentabilidad" className="w-full h-auto block" />
+                        </div>
+                        <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                          <img src={eunoiaVentas} alt="Eunoia Registro de Ventas" className="w-full h-auto block" />
                         </div>
                       </div>
                     </motion.div>
