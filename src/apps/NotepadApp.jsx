@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const NotepadApp = ({ fileContent, fileTitle }) => {
   const [content, setContent] = useState(
     fileContent || 
-`Hola, soy Johnny Rondón, Ingeniero en Informática y Desarrollador Full-Stack.
+`Hola, soy Johnny Rondón, ingeniero en informática y desarrollador full-stack.
 
 Me especializo en diseñar e implementar arquitecturas limpias y robustas, combinando la potencia de Laravel en el backend con la reactividad y dinamismo de React en el frontend, respaldado por bases de datos PostgreSQL bien optimizadas.
 

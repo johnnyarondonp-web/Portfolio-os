@@ -80,7 +80,7 @@ const Window = ({ app, isDarkMode }) => {
               transition: { type: 'spring', stiffness: 310, damping: 28, mass: 0.75 },
             }}
             transition={{ type: 'spring', stiffness: 370, damping: 32, mass: 0.85 }}
-            className={`flex flex-col bg-white/75 dark:bg-slate-900/80 backdrop-blur-2xl h-full w-full pointer-events-auto
+            className={`flex flex-col bg-white/75 dark:bg-slate-900/80 backdrop-blur-2xl h-full w-full pointer-events-auto will-change-[transform,opacity]
               ${isActive
                 ? 'border border-white/35 dark:border-white/10 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.25),0_15px_35px_-8px_rgba(0,0,0,0.15),0_0_0_1px_rgba(255,255,255,0.3)_inset] ring-1 ring-blue-500/10'
                 : 'border border-white/15 dark:border-white/5 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.12),0_4px_12px_-2px_rgba(0,0,0,0.06),0_0_0_1px_rgba(255,255,255,0.15)_inset]'}`}

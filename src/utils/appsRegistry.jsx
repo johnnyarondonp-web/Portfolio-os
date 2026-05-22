@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Code2, FolderKanban, Phone } from 'lucide-react';
+import { User, Code2, FolderKanban, Phone, Settings } from 'lucide-react';
 import BrowserApp from '../apps/BrowserApp';
 import ContactApp from '../apps/ContactApp';
 
@@ -31,5 +31,14 @@ export const appsRegistry = [
     icon: <Phone size={40} className="text-green-500 dark:text-green-400" />,
     component: <ContactApp />,
     defaultSize: { width: 320, height: 440 },
+  },
+  {
+    id: 'settings',
+    title: 'Configuración',
+    icon: <Settings size={40} className="text-indigo-500 dark:text-indigo-400" />,
+    component: null,
+    defaultSize: { width: 400, height: 300 },
   }
 ];
+
+export const desktopApps = appsRegistry.filter(app => app.id !== 'settings');

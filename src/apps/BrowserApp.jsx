@@ -77,7 +77,7 @@ const AboutPage = () => {
   const principles = [
     {
       icon: <Layers size={22} />,
-      title: 'Planificación y Estructura',
+      title: 'Planificación y estructura',
       desc: 'Diseño la arquitectura y el modelo de datos antes de escribir una sola línea de código. El orden evita el caos.',
       color: 'from-blue-500/10 to-indigo-500/5 border-blue-100 dark:border-blue-900/50',
       iconBg: 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400',
@@ -85,7 +85,7 @@ const AboutPage = () => {
     },
     {
       icon: <Shield size={22} />,
-      title: 'Robustez y Seguridad',
+      title: 'Robustez y seguridad',
       desc: 'Bloqueos atómicos en Redis, transacciones ACID y RBAC para garantizar integridad en cada operación.',
       color: 'from-indigo-500/10 to-purple-500/5 border-indigo-100 dark:border-indigo-900/50',
       iconBg: 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400',
@@ -93,7 +93,7 @@ const AboutPage = () => {
     },
     {
       icon: <Zap size={22} />,
-      title: 'Eficiencia Algorítmica',
+      title: 'Eficiencia algorítmica',
       desc: 'Algoritmos FIFO para inventarios, índices compuestos en PostgreSQL y tiempos de respuesta bajo 5ms.',
       color: 'from-teal-500/10 to-cyan-500/5 border-teal-100 dark:border-teal-900/50',
       iconBg: 'bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400',
@@ -101,7 +101,7 @@ const AboutPage = () => {
     },
     {
       icon: <Palette size={22} />,
-      title: 'Estética de Vanguardia',
+      title: 'Estética de vanguardia',
       desc: 'Interfaces refinadas y animadas que hacen que la tecnología se sienta intuitiva y humana.',
       color: 'from-purple-500/10 to-pink-500/5 border-purple-100 dark:border-purple-900/50',
       iconBg: 'bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400',
@@ -445,7 +445,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
               {/* Header */}
               <div className="pb-4 border-b border-gray-100 dark:border-slate-800">
                 <h1 className="text-xl font-black text-gray-800 dark:text-white tracking-tight flex items-center gap-2">
-                  <Code2 className="text-teal-500" /> Stack Tecnológico
+                  <Code2 className="text-teal-500" /> Stack tecnológico
                 </h1>
               </div>
 
@@ -544,7 +544,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                   {/* Header */}
                   <div className="border-b border-gray-100 dark:border-slate-800 pb-4">
                     <h1 className="text-xl font-black text-gray-800 dark:text-white tracking-tight flex items-center gap-2">
-                      <FolderKanban className="text-amber-500" /> Proyectos Destacados
+                      <FolderKanban className="text-amber-500" /> Proyectos destacados
                     </h1>
                     <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Explora las soluciones que he diseñado y programado.</p>
                   </div>
@@ -774,7 +774,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                       
                       {/* Capturas Adicionales */}
                       <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas adicionales</h3>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
                             <img src={zoionMobile1} alt="Zoion Mobile App" className="w-full h-auto block" />
@@ -893,7 +893,7 @@ const BrowserApp = ({ initialTab = 'about' }) => {
                       
                       {/* Capturas Adicionales */}
                       <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-slate-700">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas Adicionales</h3>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest text-center">Capturas adicionales</h3>
                         <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900">
                           <img src={eunoiaBalance} alt="Eunoia Balance y Rentabilidad" className="w-full h-auto block" />
                         </div>

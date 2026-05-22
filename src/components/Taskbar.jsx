@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Wifi, Volume2, Battery, Moon, Sun } from 'lucide-react';
 import { useWindows } from '../context/WindowContext';
 import StartMenu from './StartMenu';
+import WallpaperPicker from './WallpaperPicker';
 
-const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
+const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown, currentWallpaperId, onSelectWallpaper }) => {
   const { windows, restoreWindow, minimizeWindow, getActiveWindowId } = useWindows();
   const [time, setTime] = useState(new Date());
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
+  const [isWallpaperPickerOpen, setIsWallpaperPickerOpen] = useState(false);
   const activeWindowId = getActiveWindowId();
 
   useEffect(() => {
@@ -22,16 +24,27 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
 
   return (
     <>
-      <StartMenu isOpen={isStartMenuOpen} onClose={() => setIsStartMenuOpen(false)} isDarkMode={isDarkMode} onShutdown={onShutdown} />
+      <StartMenu isOpen={isStartMenuOpen} onClose={() => setIsStartMenuOpen(false)} isDarkMode={isDarkMode} onShutdown={onShutdown} onOpenWallpaper={() => { setIsStartMenuOpen(false); setIsWallpaperPickerOpen(true); }} />
+
+      <WallpaperPicker
+        isOpen={isWallpaperPickerOpen}
+        onClose={() => setIsWallpaperPickerOpen(false)}
+        currentWallpaperId={currentWallpaperId}
+        onSelectWallpaper={(wp) => {
+          onSelectWallpaper(wp);
+          setIsWallpaperPickerOpen(false);
+        }}
+        isDarkMode={isDarkMode}
+      />
       
       {/* Floating Center Dock */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 h-14 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-2xl flex items-center justify-center gap-1.5 px-3 z-[9000] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.16),0_0_0_1px_rgba(255,255,255,0.24)_inset] hover:bg-white/70 dark:hover:bg-slate-900/70 transition-all duration-300"
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 h-14 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-2xl flex items-center justify-center gap-1.5 px-3 z-[9000] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.16),0_0_0_1px_rgba(255,255,255,0.24)_inset] hover:bg-white/70 dark:hover:bg-slate-900/70 transition-[background-color,border-color,box-shadow,opacity] duration-300 will-change-[opacity]"
         style={{ maxWidth: 'calc(100vw - 180px)' }}>
         
         {/* Start Button */}
         <button 
           onClick={() => setIsStartMenuOpen(!isStartMenuOpen)}
-          className={`p-2 rounded-xl transition-all duration-300 flex items-center justify-center cursor-pointer group active:scale-90 flex-shrink-0
+          className={`p-2 rounded-xl transition-[transform,background-color,border-color,box-shadow] duration-300 will-change-transform flex items-center justify-center cursor-pointer group active:scale-90 flex-shrink-0
             ${isStartMenuOpen 
               ? 'bg-blue-500/15 border border-blue-400/30 shadow-[inset_0_2px_4px_rgba(59,130,246,0.1)]' 
               : 'border border-transparent hover:bg-white/30 dark:hover:bg-white/5 hover:border-white/10 hover:shadow-sm'}`}
@@ -71,7 +84,7 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
               <button
                 key={w.id}
                 onClick={() => handleAppClick(w)}
-                className={`p-2 rounded-xl transition-all duration-300 relative flex items-center justify-center min-w-[44px] h-[40px] flex-shrink-0 cursor-pointer group active:scale-95
+                className={`p-2 rounded-xl transition-[transform,background-color,border-color,box-shadow] duration-300 will-change-transform relative flex items-center justify-center min-w-[44px] h-[40px] flex-shrink-0 cursor-pointer group active:scale-95
                   ${isActive 
                     ? 'bg-blue-500/10 shadow-[0_2px_8px_rgba(59,130,246,0.08)] border border-blue-400/20 dark:border-blue-400/10' 
                     : 'hover:bg-white/40 dark:hover:bg-white/5 border border-transparent'}`}
@@ -79,7 +92,7 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
                 <div className="transform transition-transform group-hover:scale-105 duration-200 flex items-center justify-center">
                   {React.cloneElement(w.icon, { size: 22 })}
                 </div>
-                <div className={`absolute bottom-0.5 h-[4px] rounded-full transition-all duration-300
+                <div className={`absolute bottom-0.5 h-[4px] rounded-full transition-[width,box-shadow] duration-300
                   ${isActive 
                     ? 'w-6 bg-gradient-to-r from-blue-400 to-indigo-500 shadow-[0_2px_8px_rgba(59,130,246,0.5)]' 
                     : 'w-2 bg-gray-450/70'}`} 
@@ -88,10 +101,11 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
             );
           })}
         </div>
+
       </div>
 
       {/* Floating System Tray & Clock Pill */}
-      <div className="absolute bottom-5 right-5 h-14 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-2xl flex items-center gap-2 px-3 z-[9000] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.12),0_0_0_1px_rgba(255,255,255,0.24)_inset] hover:bg-white/75 dark:hover:bg-slate-900/75 hover:shadow-md transition-all duration-300 select-none cursor-pointer">
+      <div className="absolute bottom-5 right-5 h-14 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/20 dark:border-white/5 rounded-2xl flex items-center gap-2 px-3 z-[9000] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.12),0_0_0_1px_rgba(255,255,255,0.24)_inset] hover:bg-white/75 dark:hover:bg-slate-900/75 hover:shadow-md transition-[background-color,border-color,box-shadow,opacity] duration-300 will-change-[opacity] select-none cursor-pointer">
         {/* System icons */}
         <div className="hidden sm:flex items-center gap-1.5 text-gray-600 dark:text-white">
           <div className="p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors flex items-center justify-center">
@@ -108,7 +122,7 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, onShutdown }) => {
         <button 
           onClick={(e) => { e.stopPropagation(); setIsDarkMode(!isDarkMode); }}
           className="p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors flex items-center justify-center cursor-pointer text-gray-600 dark:text-white"
-          title={isDarkMode ? "Modo Claro" : "Modo Oscuro"}
+          title={isDarkMode ? "Modo claro" : "Modo oscuro"}
         >
           {isDarkMode 
             ? <Sun size={13} className="text-yellow-400 hover:text-yellow-500 transition-colors" />

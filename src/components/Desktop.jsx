@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useWindows } from '../context/WindowContext';
-import { appsRegistry } from '../utils/appsRegistry';
+import { desktopApps } from '../utils/appsRegistry';
 import Widget from './Widget';
 
 const CELL_W = 100;
@@ -38,7 +38,7 @@ const buildDefaultLayout = (maxRows = 8) => {
   const layout = {};
   const occupied = new Set();
 
-  appsRegistry.forEach((app, index) => {
+  desktopApps.forEach((app, index) => {
     let col = Math.floor(index / maxRows);
     let row = index % maxRows;
 
@@ -264,7 +264,7 @@ const DesktopIcon = ({
         zIndex: livePos ? 100 : 10,
         cursor: livePos ? 'grabbing' : 'pointer',
       }}
-      className={`pointer-events-auto flex flex-col items-center justify-center w-24 h-24 p-2 rounded-2xl select-none group
+      className={`pointer-events-auto flex flex-col items-center justify-center w-24 h-24 p-2 rounded-2xl select-none group will-change-transform
         ${isSelected
           ? 'bg-white/10 border-2 border-blue-400/60 shadow-[0_4px_12px_rgba(59,130,246,0.3),inset_0_1px_2px_rgba(255,255,255,0.15)]'
           : 'border border-transparent hover:bg-white/10 hover:border-white/10 hover:shadow-sm'}
@@ -294,16 +294,54 @@ const DesktopIcon = ({
   );
 };
 
+const DEFAULT_LIGHT_URL = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2670&auto=format&fit=crop';
+const DEFAULT_DARK_URL  = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2670&auto=format&fit=crop';
+
 // ---------------------------------------------------------------------------
 // Desktop
 // ---------------------------------------------------------------------------
-const Desktop = ({ children, isDarkMode }) => {
+const Desktop = ({ children, isDarkMode, wallpaperUrl }) => {
   const { openWindow } = useWindows();
   const [selectedAppId, setSelectedAppId] = useState(null);
   const desktopRef = useRef(null);
+  const imgRef = useRef(null);
+  const timeoutRef = useRef(null);
+  const [currentBg, setCurrentBg] = useState(wallpaperUrl || DEFAULT_LIGHT_URL);
+  const [nextBg, setNextBg] = useState(null);
 
   // Calculamos maxRows dinámicamente según el alto real del desktop
   const [maxRows, setMaxRows] = useState(8);
+
+  useEffect(() => {
+    const target = wallpaperUrl || (isDarkMode ? DEFAULT_DARK_URL : DEFAULT_LIGHT_URL);
+    if (target === currentBg) return;
+
+    const img = new Image();
+    imgRef.current = img;
+
+    img.onload = () => {
+      setNextBg(target);
+      timeoutRef.current = setTimeout(() => {
+        setCurrentBg(target);
+        setNextBg(null);
+        imgRef.current = null;
+        timeoutRef.current = null;
+      }, 700);
+    };
+
+    img.src = target;
+
+    return () => {
+      if (imgRef.current) {
+        imgRef.current.onload = null;
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      imgRef.current = null;
+      timeoutRef.current = null;
+    };
+  }, [wallpaperUrl, isDarkMode, currentBg]);
 
   useEffect(() => {
     const updateMaxRows = () => {
@@ -370,17 +408,28 @@ const Desktop = ({ children, isDarkMode }) => {
   return (
     <div
       ref={desktopRef}
-      className="relative w-screen h-screen overflow-hidden select-none transition-all duration-700 bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: isDarkMode
-          ? 'url("https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2670&auto=format&fit=crop")'
-          : 'url("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop")',
-      }}
+      className="relative w-screen h-screen overflow-hidden select-none"
       onClick={handleDesktopClick}
     >
+      {/* Capa A — fondo actual, siempre visible */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url("${currentBg}")` }}
+      />
+      {/* Capa B — nuevo fondo, aparece encima con fade-in */}
+      {nextBg && (
+        <motion.div
+          key={nextBg}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.65, ease: 'easeInOut' }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url("${nextBg}")` }}
+        />
+      )}
       {/* Draggable Desktop Icons */}
       <div className="absolute top-0 left-0 w-full h-[calc(100vh-80px)] pointer-events-none z-10">
-        {appsRegistry.map((app) => (
+        {desktopApps.map((app) => (
           <DesktopIcon
             key={app.id}
             app={app}

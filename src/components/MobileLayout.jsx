@@ -75,7 +75,7 @@ const HomeTab = ({ isDarkMode }) => (
 
     {/* Stack tags */}
     <div className={`rounded-2xl border p-4 ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'} shadow-sm`}>
-      <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Stack Principal</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Stack principal</p>
       <div className="flex flex-wrap gap-2">
         {['Laravel 13','React 19','TypeScript','PostgreSQL','Redis','Inertia.js','Tailwind CSS','Docker'].map(s => (
           <span key={s} className="text-[11px] font-bold px-2.5 py-1 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50 rounded-full text-indigo-600 dark:text-indigo-400">{s}</span>
@@ -85,12 +85,12 @@ const HomeTab = ({ isDarkMode }) => (
 
     {/* Principles */}
     <div className="space-y-3">
-      <p className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Principios de Ingeniería</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Principios de ingeniería</p>
       {[
-        { icon: <Layers size={16}/>, title: 'Planificación y Estructura', desc: 'Arquitectura y modelo de datos antes del código.', color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/30' },
-        { icon: <Shield size={16}/>, title: 'Robustez y Seguridad', desc: 'Bloqueos Redis, transacciones ACID y RBAC.', color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-900/30' },
-        { icon: <Zap size={16}/>, title: 'Eficiencia Algorítmica', desc: 'FIFO, índices compuestos, respuestas bajo 5ms.', color: 'text-teal-600', bg: 'bg-teal-50 dark:bg-teal-900/30' },
-        { icon: <Palette size={16}/>, title: 'Estética de Vanguardia', desc: 'Interfaces refinadas que se sienten intuitivas.', color: 'text-purple-600', bg: 'bg-purple-50 dark:bg-purple-900/30' },
+        { icon: <Layers size={16}/>, title: 'Planificación y estructura', desc: 'Arquitectura y modelo de datos antes del código.', color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/30' },
+        { icon: <Shield size={16}/>, title: 'Robustez y seguridad', desc: 'Bloqueos Redis, transacciones ACID y RBAC.', color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-900/30' },
+        { icon: <Zap size={16}/>, title: 'Eficiencia algorítmica', desc: 'FIFO, índices compuestos, respuestas bajo 5ms.', color: 'text-teal-600', bg: 'bg-teal-50 dark:bg-teal-900/30' },
+        { icon: <Palette size={16}/>, title: 'Estética de vanguardia', desc: 'Interfaces refinadas que se sienten intuitivas.', color: 'text-purple-600', bg: 'bg-purple-50 dark:bg-purple-900/30' },
         { icon: <Server size={16}/>, title: 'Backend como columna', desc: 'Servicios desacoplados, colas, caché y APIs.', color: 'text-orange-600', bg: 'bg-orange-50 dark:bg-orange-900/30' },
         { icon: <Database size={16}/>, title: 'Datos bien modelados', desc: 'Esquemas normalizados y relaciones que duran.', color: 'text-cyan-600', bg: 'bg-cyan-50 dark:bg-cyan-900/30' },
       ].map((p, i) => (
@@ -223,7 +223,7 @@ const ProjectsTab = ({ isDarkMode }) => {
 
   return (
     <div className="space-y-4 pb-4">
-      <p className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Proyectos Destacados</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Proyectos destacados</p>
       {[
         { id: 'zoion', badge: 'Clínico / ERP', title: 'Zoion — Gestión Veterinaria', desc: 'ERP veterinario con agendamiento Round-Robin y bloqueos Redis.', tags: ['Laravel 13','React 19','TypeScript','PostgreSQL'], color: 'emerald', img: zoionPreview },
         { id: 'eunoia', badge: 'Finanzas / ERP', title: 'Eunoia — ERP Administrativo', desc: 'ERP retail con FIFO, multimoneda y tasa BCV en tiempo real.', tags: ['Laravel 13','PHP 8.3','Alpine.js','MySQL'], color: 'pink', img: eunoiaPreview },
@@ -344,7 +344,7 @@ const SkillsTab = ({ isDarkMode }) => {
 
   return (
     <div className="space-y-4 pb-4">
-      <p className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Stack Tecnológico</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Stack tecnológico</p>
       {skillGroups.map((g, i) => (
         <motion.div
           key={g.title}

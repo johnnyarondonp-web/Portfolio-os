@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Desktop from './components/Desktop';
 import Taskbar from './components/Taskbar';
+import { WALLPAPERS } from './components/WallpaperPicker';
 import Window from './components/Window';
 import MobileLayout from './components/MobileLayout';
 import { useWindows } from './context/WindowContext';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const DEFAULT_WALLPAPER = WALLPAPERS.find(w => w.id === 'mountain-light');
 
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
@@ -46,6 +49,7 @@ function App() {
   const [bootStatus, setBootStatus] = useState('loggingIn');
   const chimePlayed = useRef(false);
   const isMobile = useIsMobile();
+  const [selectedWallpaper, setSelectedWallpaper] = useState(DEFAULT_WALLPAPER);
 
   useEffect(() => {
     if (bootStatus === 'loggingIn') {
@@ -54,12 +58,12 @@ function App() {
     }
   }, [bootStatus]);
 
-  const handleFirstInteraction = () => {
+  const handleFirstInteraction = useCallback(() => {
     if (chimePlayed.current) return;
     chimePlayed.current = true;
     playStartupChime();
     window.removeEventListener('pointerdown', handleFirstInteraction);
-  };
+  }, []);
 
   useEffect(() => {
     if (bootStatus === 'ready') {
@@ -67,6 +71,16 @@ function App() {
       return () => window.removeEventListener('pointerdown', handleFirstInteraction);
     }
   }, [bootStatus]);
+
+  const handleSetDarkMode = (newDark) => {
+    setIsDarkMode(newDark);
+    if (selectedWallpaper) {
+      const opposite = WALLPAPERS.find(
+        w => w.theme === selectedWallpaper.theme && w.mode === (newDark ? 'dark' : 'light')
+      );
+      if (opposite) setSelectedWallpaper(opposite);
+    }
+  };
 
   const handleShutdown = () => {
     chimePlayed.current = false;
@@ -122,7 +136,7 @@ function App() {
             exit={{ opacity: 0 }}
             className="w-full h-full absolute inset-0"
           >
-            <Desktop isDarkMode={isDarkMode}>
+            <Desktop isDarkMode={isDarkMode} wallpaperUrl={selectedWallpaper?.url}>
               {windows.map((windowData) => (
                 <Window key={windowData.id} app={windowData} isDarkMode={isDarkMode} />
               ))}
@@ -135,7 +149,18 @@ function App() {
               className="absolute bottom-0 w-full z-[9000] pointer-events-none"
             >
               <div className="pointer-events-auto">
-                <Taskbar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} onShutdown={handleShutdown} />
+                <Taskbar
+                  isDarkMode={isDarkMode}
+                  setIsDarkMode={handleSetDarkMode}
+                  onShutdown={handleShutdown}
+                  currentWallpaperId={selectedWallpaper?.id ?? null}
+                  onSelectWallpaper={(wp) => {
+                    setSelectedWallpaper(wp);
+                    // Sincronizar modo oscuro con el modo del wallpaper elegido
+                    if (wp.mode === 'dark') setIsDarkMode(true);
+                    else if (wp.mode === 'light') setIsDarkMode(false);
+                  }}
+                />
               </div>
             </motion.div>
           </motion.div>
@@ -167,29 +192,29 @@ function App() {
   );
 }
 
-const BIOSSequence = () => {
-  const lines = [
-    "ASUS UEFI BIOS Utility - EZ Mode",
-    "CPU: AMD Ryzen 9 7950X 16-Core Processor",
-    "Memory: 65536MB (DDR5 6000MHz)",
-    "Initializing USB Controllers... Done.",
-    "Auto-Detecting SATA Port 1... Not Detected",
-    "Auto-Detecting NVMe M.2_1... Samsung SSD 990 PRO 2TB",
-    "",
-    "Loading Linux Kernel...",
-    "Initializing Laravel Backend v13...",
-    "Starting Redis In-Memory Datastore... OK",
-    "Connecting to PostgreSQL Database... OK",
-    "Checking VILT Stack status: OK",
-    "Mounting file systems... Done.",
-    "Booting Portfolio OS..."
-  ];
+const BIOS_LINES = [
+  "ASUS UEFI BIOS Utility - EZ Mode",
+  "CPU: AMD Ryzen 9 7950X 16-Core Processor",
+  "Memory: 65536MB (DDR5 6000MHz)",
+  "Initializing USB Controllers... Done.",
+  "Auto-Detecting SATA Port 1... Not Detected",
+  "Auto-Detecting NVMe M.2_1... Samsung SSD 990 PRO 2TB",
+  "",
+  "Loading Linux Kernel...",
+  "Initializing Laravel Backend v13...",
+  "Starting Redis In-Memory Datastore... OK",
+  "Connecting to PostgreSQL Database... OK",
+  "Checking VILT Stack status: OK",
+  "Mounting file systems... Done.",
+  "Booting Portfolio OS..."
+];
 
+const BIOSSequence = () => {
   const [visibleLines, setVisibleLines] = useState([]);
 
   useEffect(() => {
     let delay = 0;
-    lines.forEach((line, index) => {
+    BIOS_LINES.forEach((line, index) => {
       delay += Math.random() * 200 + 50;
       if (index > 6) delay += 300;
       setTimeout(() => setVisibleLines(prev => [...prev, line]), delay);
