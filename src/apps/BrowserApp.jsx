@@ -6,14 +6,14 @@ import {
   Layers, Cpu, BookOpen, ExternalLink,
   ChevronRight, MapPin, CheckCircle2, Zap, Shield, Palette
 } from 'lucide-react';
-import heroImg from '../assets/hero.png';
-import zoionPreview from '../assets/zoion-preview.png';
-import eunoiaPreview from '../assets/eunoia-preview.png';
-import zoionAdmin from '../assets/zoion-admin.png';
-import zoionMobile1 from '../assets/zoion-mobile-1.webp';
-import zoionMobile2 from '../assets/zoion-mobile-2.webp';
-import eunoiaBalance from '../assets/eunoia-balance.png';
-import eunoiaVentas from '../assets/eunoia-ventas.png';
+const heroImg = new URL('../assets/hero.png', import.meta.url).href;
+const zoionPreview = new URL('../assets/zoion-preview.png', import.meta.url).href;
+const eunoiaPreview = new URL('../assets/eunoia-preview.png', import.meta.url).href;
+const zoionAdmin = new URL('../assets/zoion-admin.png', import.meta.url).href;
+const zoionMobile1 = new URL('../assets/zoion-mobile-1.webp', import.meta.url).href;
+const zoionMobile2 = new URL('../assets/zoion-mobile-2.webp', import.meta.url).href;
+const eunoiaBalance = new URL('../assets/eunoia-balance.png', import.meta.url).href;
+const eunoiaVentas = new URL('../assets/eunoia-ventas.png', import.meta.url).href;
 
 /* ─── 3D Tilt card ─── */
 const TiltCard = ({ children, className }) => {

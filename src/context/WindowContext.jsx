@@ -10,31 +10,33 @@ export const WindowProvider = ({ children }) => {
   const [windows, setWindows] = useState([]);
   const [highestZIndex, setHighestZIndex] = useState(10);
 
+  // REGLA: NUNCA leas estado de React directamente en funciones que también
+  // llaman setters de ese estado. Usa siempre el patrón funcional: setState(prev => ...)
+  const getNextZ = (prev) => Math.max(...prev.map((w) => w.zIndex), 10) + 1;
+
   // app config object expects: { id, title, icon, component, defaultSize }
   const openWindow = (app) => {
     setWindows((prev) => {
-      // Si la ventana ya está abierta, la enfocamos y restauramos
+      const nextZ = getNextZ(prev);
       const existing = prev.find((w) => w.id === app.id);
       if (existing) {
         return prev.map((w) =>
           w.id === app.id
-            ? { ...w, isMinimized: false, zIndex: highestZIndex + 1 }
+            ? { ...w, isMinimized: false, zIndex: nextZ }
             : w
         );
       }
 
-      // Si no existe, la creamos
       const newWindow = {
         ...app,
         isOpen: true,
         isMinimized: false,
         isMaximized: false,
-        zIndex: highestZIndex + 1,
+        zIndex: nextZ,
       };
       
       return [...prev, newWindow];
     });
-    setHighestZIndex((prev) => prev + 1);
   };
 
   const closeWindow = (id) => {
@@ -48,30 +50,30 @@ export const WindowProvider = ({ children }) => {
   };
 
   const restoreWindow = (id) => {
-    setWindows((prev) =>
-      prev.map((w) =>
-        w.id === id ? { ...w, isMinimized: false, zIndex: highestZIndex + 1 } : w
-      )
-    );
-    setHighestZIndex((prev) => prev + 1);
+    setWindows((prev) => {
+      const nextZ = getNextZ(prev);
+      return prev.map((w) =>
+        w.id === id ? { ...w, isMinimized: false, zIndex: nextZ } : w
+      );
+    });
   };
 
   const toggleMaximize = (id) => {
-    setWindows((prev) =>
-      prev.map((w) =>
-        w.id === id ? { ...w, isMaximized: !w.isMaximized, zIndex: highestZIndex + 1 } : w
-      )
-    );
-    setHighestZIndex((prev) => prev + 1);
+    setWindows((prev) => {
+      const nextZ = getNextZ(prev);
+      return prev.map((w) =>
+        w.id === id ? { ...w, isMaximized: !w.isMaximized, zIndex: nextZ } : w
+      );
+    });
   };
 
   const focusWindow = (id) => {
-    setWindows((prev) =>
-      prev.map((w) =>
-        w.id === id ? { ...w, zIndex: highestZIndex + 1 } : w
-      )
-    );
-    setHighestZIndex((prev) => prev + 1);
+    setWindows((prev) => {
+      const nextZ = getNextZ(prev);
+      return prev.map((w) =>
+        w.id === id ? { ...w, zIndex: nextZ } : w
+      );
+    });
   };
 
   const isWindowOpen = (id) => {

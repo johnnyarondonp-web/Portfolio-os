@@ -74,8 +74,8 @@ const HomeTab = ({ isDarkMode }) => (
     </div>
 
     {/* Stack tags */}
-    <div className={`rounded-2xl border p-4 ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'} shadow-sm`}>
-      <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Stack principal</p>
+    <div className={`rounded-2xl border p-4 bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700 shadow-sm`}>
+      <p className={`text-[10px] font-black uppercase tracking-widest mb-3 text-gray-400 dark:text-slate-400`}>Stack principal</p>
       <div className="flex flex-wrap gap-2">
         {['Laravel 13','React 19','TypeScript','PostgreSQL','Redis','Inertia.js','Tailwind CSS','Docker'].map(s => (
           <span key={s} className="text-[11px] font-bold px-2.5 py-1 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800/50 rounded-full text-indigo-600 dark:text-indigo-400">{s}</span>
@@ -85,7 +85,7 @@ const HomeTab = ({ isDarkMode }) => (
 
     {/* Principles */}
     <div className="space-y-3">
-      <p className={`text-[10px] font-black uppercase tracking-widest px-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Principios de ingeniería</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest px-1 text-gray-400 dark:text-slate-400`}>Principios de ingeniería</p>
       {[
         { icon: <Layers size={16}/>, title: 'Planificación y estructura', desc: 'Arquitectura y modelo de datos antes del código.', color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/30' },
         { icon: <Shield size={16}/>, title: 'Robustez y seguridad', desc: 'Bloqueos Redis, transacciones ACID y RBAC.', color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-900/30' },
@@ -95,11 +95,11 @@ const HomeTab = ({ isDarkMode }) => (
         { icon: <Database size={16}/>, title: 'Datos bien modelados', desc: 'Esquemas normalizados y relaciones que duran.', color: 'text-cyan-600', bg: 'bg-cyan-50 dark:bg-cyan-900/30' },
       ].map((p, i) => (
         <motion.div key={p.title} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
-          className={`flex gap-3 items-start p-3.5 rounded-2xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'} shadow-sm`}>
+          className={`flex gap-3 items-start p-3.5 rounded-2xl border bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700 shadow-sm`}>
           <div className={`w-8 h-8 flex-shrink-0 rounded-xl flex items-center justify-center ${p.bg} ${p.color}`}>{p.icon}</div>
           <div className="min-w-0">
-            <p className={`text-xs font-bold leading-tight ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{p.title}</p>
-            <p className={`text-[11px] mt-0.5 leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{p.desc}</p>
+            <p className={`text-xs font-bold leading-tight text-gray-800 dark:text-white`}>{p.title}</p>
+            <p className={`text-[11px] mt-0.5 leading-relaxed text-gray-500 dark:text-slate-400`}>{p.desc}</p>
           </div>
         </motion.div>
       ))}
@@ -126,15 +126,15 @@ const ProjectsTab = ({ isDarkMode }) => {
 
   if (selected === 'zoion') return (
     <div className="pb-4">
-      <button onClick={() => setSelected(null)} className={`flex items-center gap-1.5 text-xs font-bold mb-4 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+      <button onClick={() => setSelected(null)} className={`flex items-center gap-1.5 text-xs font-bold mb-4 text-gray-500 dark:text-slate-400`}>
         <ArrowLeft size={14}/> Volver
       </button>
-      <div className={`rounded-2xl overflow-hidden border mb-4 ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}>
+      <div className={`rounded-2xl overflow-hidden border mb-4 border-gray-200 dark:border-slate-700`}>
         <img src={zoionPreview} alt="Zoion" className="w-full h-auto block"/>
       </div>
       <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 px-2.5 py-1 rounded-full">Clínico / ERP</span>
-      <h1 className={`text-xl font-black mt-2 mb-1 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Zoion — Gestión Veterinaria</h1>
-      <p className={`text-xs mb-3 leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>ERP para clínicas veterinarias con agendamiento Round-Robin, bloqueos Redis y RBAC multinivel.</p>
+      <h1 className={`text-xl font-black mt-2 mb-1 text-gray-800 dark:text-white`}>Zoion — Gestión Veterinaria</h1>
+      <p className={`text-xs mb-3 leading-relaxed text-gray-500 dark:text-slate-400`}>ERP para clínicas veterinarias con agendamiento Round-Robin, bloqueos Redis y RBAC multinivel.</p>
       <div className="flex flex-wrap gap-1.5 mb-4">
         {['Laravel 13','React 19','TypeScript','PostgreSQL','Redis'].map(t=>(
           <span key={t} className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-full text-[10px] font-bold text-emerald-700 dark:text-emerald-400">{t}</span>
@@ -142,25 +142,25 @@ const ProjectsTab = ({ isDarkMode }) => {
       </div>
       <div className="space-y-2 mb-4">
         {zoionFeatures.map(f=>(
-          <div key={f.title} className={`flex gap-2.5 p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'}`}>
+          <div key={f.title} className={`flex gap-2.5 p-3 rounded-xl border bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700`}>
             <CheckCircle2 className="text-emerald-500 flex-shrink-0 mt-0.5" size={14}/>
             <div>
-              <p className={`text-xs font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{f.title}</p>
-              <p className={`text-[11px] mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{f.desc}</p>
+              <p className={`text-xs font-bold text-gray-800 dark:text-white`}>{f.title}</p>
+              <p className={`text-[11px] mt-0.5 text-gray-500 dark:text-slate-400`}>{f.desc}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="grid grid-cols-2 gap-2 mb-4">
         {[['Controladores','20+'],['Tests Auto','22'],['Páginas React','30+'],['Roles','4']].map(([k,v])=>(
-          <div key={k} className={`p-3 rounded-xl border text-center ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'}`}>
-            <div className={`text-[10px] uppercase font-bold ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>{k}</div>
+          <div key={k} className={`p-3 rounded-xl border text-center bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700`}>
+            <div className={`text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500`}>{k}</div>
             <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{v}</div>
           </div>
         ))}
       </div>
       <div className="space-y-3">
-        <p className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Capturas</p>
+        <p className={`text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500`}>Capturas</p>
         <div className="grid grid-cols-2 gap-2">
           <img src={zoionMobile1} alt="" className="rounded-xl w-full h-auto border border-gray-200 dark:border-slate-700"/>
           <img src={zoionMobile2} alt="" className="rounded-xl w-full h-auto border border-gray-200 dark:border-slate-700"/>
@@ -176,15 +176,15 @@ const ProjectsTab = ({ isDarkMode }) => {
 
   if (selected === 'eunoia') return (
     <div className="pb-4">
-      <button onClick={() => setSelected(null)} className={`flex items-center gap-1.5 text-xs font-bold mb-4 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+      <button onClick={() => setSelected(null)} className={`flex items-center gap-1.5 text-xs font-bold mb-4 text-gray-500 dark:text-slate-400`}>
         <ArrowLeft size={14}/> Volver
       </button>
-      <div className={`rounded-2xl overflow-hidden border mb-4 ${isDarkMode ? 'border-slate-700' : 'border-gray-200'}`}>
+      <div className={`rounded-2xl overflow-hidden border mb-4 border-gray-200 dark:border-slate-700`}>
         <img src={eunoiaPreview} alt="Eunoia" className="w-full h-auto block"/>
       </div>
       <span className="text-[10px] font-black uppercase tracking-wider text-pink-600 bg-pink-50 dark:bg-pink-900/30 px-2.5 py-1 rounded-full">Finanzas / ERP</span>
-      <h1 className={`text-xl font-black mt-2 mb-1 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Eunoia — ERP Administrativo</h1>
-      <p className={`text-xs mb-3 leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>ERP retail con inventario FIFO, contabilidad multimoneda, tasa BCV en tiempo real e índices PostgreSQL.</p>
+      <h1 className={`text-xl font-black mt-2 mb-1 text-gray-800 dark:text-white`}>Eunoia — ERP Administrativo</h1>
+      <p className={`text-xs mb-3 leading-relaxed text-gray-500 dark:text-slate-400`}>ERP retail con inventario FIFO, contabilidad multimoneda, tasa BCV en tiempo real e índices PostgreSQL.</p>
       <div className="flex flex-wrap gap-1.5 mb-4">
         {['Laravel 13','PHP 8.3','Alpine.js','MySQL','Tailwind CSS'].map(t=>(
           <span key={t} className="px-2 py-0.5 bg-pink-50 dark:bg-pink-900/30 border border-pink-200 dark:border-pink-800 rounded-full text-[10px] font-bold text-pink-700 dark:text-pink-400">{t}</span>
@@ -192,25 +192,25 @@ const ProjectsTab = ({ isDarkMode }) => {
       </div>
       <div className="space-y-2 mb-4">
         {eunoiaFeatures.map(f=>(
-          <div key={f.title} className={`flex gap-2.5 p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'}`}>
+          <div key={f.title} className={`flex gap-2.5 p-3 rounded-xl border bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700`}>
             <CheckCircle2 className="text-pink-500 flex-shrink-0 mt-0.5" size={14}/>
             <div>
-              <p className={`text-xs font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{f.title}</p>
-              <p className={`text-[11px] mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{f.desc}</p>
+              <p className={`text-xs font-bold text-gray-800 dark:text-white`}>{f.title}</p>
+              <p className={`text-[11px] mt-0.5 text-gray-500 dark:text-slate-400`}>{f.desc}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="grid grid-cols-2 gap-2 mb-4">
         {[['Controladores','4+'],['Tests','12'],['Servicios','2'],['Migraciones','17']].map(([k,v])=>(
-          <div key={k} className={`p-3 rounded-xl border text-center ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'}`}>
-            <div className={`text-[10px] uppercase font-bold ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>{k}</div>
+          <div key={k} className={`p-3 rounded-xl border text-center bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700`}>
+            <div className={`text-[10px] uppercase font-bold text-gray-400 dark:text-slate-500`}>{k}</div>
             <div className="text-2xl font-black text-pink-600 dark:text-pink-400">{v}</div>
           </div>
         ))}
       </div>
       <div className="space-y-3">
-        <p className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Capturas</p>
+        <p className={`text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500`}>Capturas</p>
         <img src={eunoiaBalance} alt="" className="rounded-xl w-full h-auto border border-gray-200 dark:border-slate-700"/>
         <img src={eunoiaVentas} alt="" className="rounded-xl w-full h-auto border border-gray-200 dark:border-slate-700"/>
       </div>
@@ -223,22 +223,22 @@ const ProjectsTab = ({ isDarkMode }) => {
 
   return (
     <div className="space-y-4 pb-4">
-      <p className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Proyectos destacados</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-slate-400`}>Proyectos destacados</p>
       {[
         { id: 'zoion', badge: 'Clínico / ERP', title: 'Zoion — Gestión Veterinaria', desc: 'ERP veterinario con agendamiento Round-Robin y bloqueos Redis.', tags: ['Laravel 13','React 19','TypeScript','PostgreSQL'], color: 'emerald', img: zoionPreview },
         { id: 'eunoia', badge: 'Finanzas / ERP', title: 'Eunoia — ERP Administrativo', desc: 'ERP retail con FIFO, multimoneda y tasa BCV en tiempo real.', tags: ['Laravel 13','PHP 8.3','Alpine.js','MySQL'], color: 'pink', img: eunoiaPreview },
       ].map((p, i) => (
         <motion.div key={p.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
           onClick={() => setSelected(p.id)}
-          className={`rounded-2xl overflow-hidden border cursor-pointer active:scale-[0.98] transition-transform ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'} shadow-sm`}>
+          className={`rounded-2xl overflow-hidden border cursor-pointer active:scale-[0.98] transition-transform bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700 shadow-sm`}>
           <div className="relative overflow-hidden" style={{ height: 160 }}>
             <img src={p.img} alt={p.title} className="w-full h-auto object-top object-cover"/>
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"/>
           </div>
           <div className="p-4 space-y-2">
             <span className={`text-[10px] font-black uppercase tracking-wider text-${p.color}-600 bg-${p.color}-50 dark:bg-${p.color}-900/30 px-2 py-0.5 rounded-full`}>{p.badge}</span>
-            <h2 className={`text-sm font-black leading-tight ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{p.title}</h2>
-            <p className={`text-[11px] leading-relaxed ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{p.desc}</p>
+            <h2 className={`text-sm font-black leading-tight text-gray-800 dark:text-white`}>{p.title}</h2>
+            <p className={`text-[11px] leading-relaxed text-gray-500 dark:text-slate-400`}>{p.desc}</p>
             <div className="flex flex-wrap gap-1">
               {p.tags.map(t => (
                 <span key={t} className={`px-1.5 py-0.5 text-[9px] font-bold rounded border text-${p.color}-600 dark:text-${p.color}-400 bg-${p.color}-50 dark:bg-${p.color}-900/20 border-${p.color}-100 dark:border-${p.color}-900/50`}>{t}</span>
@@ -344,7 +344,7 @@ const SkillsTab = ({ isDarkMode }) => {
 
   return (
     <div className="space-y-4 pb-4">
-      <p className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-gray-400'}`}>Stack tecnológico</p>
+      <p className={`text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-slate-400`}>Stack tecnológico</p>
       {skillGroups.map((g, i) => (
         <motion.div
           key={g.title}
@@ -362,12 +362,12 @@ const SkillsTab = ({ isDarkMode }) => {
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.07 + idx * 0.04 }}
-                className={`flex items-center gap-2 rounded-xl px-3 py-2.5 border shadow-sm ${isDarkMode ? 'bg-slate-900/80 border-slate-700/60' : 'bg-white/80 border-white/90'}`}
+                className={`flex items-center gap-2 rounded-xl px-3 py-2.5 border shadow-sm bg-white/80 border-white/90 dark:bg-slate-900/80 dark:border-slate-700/60`}
               >
-                <div className={`w-7 h-7 flex items-center justify-center flex-shrink-0 rounded-lg shadow-sm border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-100'}`}>
+                <div className={`w-7 h-7 flex items-center justify-center flex-shrink-0 rounded-lg shadow-sm border bg-white border-gray-100 dark:bg-slate-800 dark:border-slate-700`}>
                   <MobileTechIcon name={s.icon} size={16} />
                 </div>
-                <p className={`text-[11px] font-bold leading-tight truncate ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{s.name}</p>
+                <p className={`text-[11px] font-bold leading-tight truncate text-gray-800 dark:text-white`}>{s.name}</p>
               </motion.div>
             ))}
           </div>
@@ -389,16 +389,16 @@ const ContactTab = ({ isDarkMode }) => {
   return (
     <div className="flex flex-col justify-center gap-4 py-8">
       <div className="text-center mb-2">
-        <h2 className={`text-xl font-black ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Contacto</h2>
-        <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>Hablemos sobre tu próximo proyecto</p>
+        <h2 className={`text-xl font-black text-gray-800 dark:text-white`}>Contacto</h2>
+        <p className={`text-xs mt-1 text-gray-500 dark:text-slate-400`}>Hablemos sobre tu próximo proyecto</p>
       </div>
       {links.map((l, i) => (
         <motion.a key={l.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }}
           href={l.url} target="_blank" rel="noopener noreferrer"
-          className={`flex items-center gap-4 px-5 py-4 rounded-2xl border shadow-sm active:scale-[0.98] transition-transform ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-gray-100'}`}>
+          className={`flex items-center gap-4 px-5 py-4 rounded-2xl border shadow-sm active:scale-[0.98] transition-transform bg-white border-gray-100 dark:bg-slate-900 dark:border-slate-700`}>
           <img src={l.iconUrl} alt={l.label} className={`w-7 h-7 object-contain flex-shrink-0 ${l.invert && isDarkMode ? 'invert' : ''}`}/>
-          <span className={`flex-1 font-extrabold text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{l.label}</span>
-          <ExternalLink size={14} className={isDarkMode ? 'text-slate-500' : 'text-gray-400'}/>
+          <span className={`flex-1 font-extrabold text-sm text-gray-800 dark:text-white`}>{l.label}</span>
+          <ExternalLink size={14} className="text-gray-400 dark:text-slate-500"/>
         </motion.a>
       ))}
     </div>
@@ -433,11 +433,11 @@ const MobileLayout = ({ isDarkMode, setIsDarkMode }) => {
     >
       {/* Status Bar */}
       <div className={`flex-shrink-0 flex items-center justify-between px-5 py-2 ${statusBg} border-b backdrop-blur-xl z-50`}>
-        <span className={`text-xs font-bold ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
+        <span className={`text-xs font-bold text-gray-700 dark:text-slate-300`}>
           {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </span>
         <span />
-        <button onClick={() => setIsDarkMode(!isDarkMode)} className={`p-1 rounded-lg transition-colors ${isDarkMode ? 'text-yellow-400' : 'text-gray-600'}`}>
+        <button onClick={() => setIsDarkMode(!isDarkMode)} className={`p-1 rounded-lg transition-colors text-gray-600 dark:text-yellow-400`}>
           {isDarkMode ? <Sun size={14}/> : <Moon size={14}/>}
         </button>
       </div>
