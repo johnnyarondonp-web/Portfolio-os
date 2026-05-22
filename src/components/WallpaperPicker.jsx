@@ -2,6 +2,7 @@ import React from 'react';
 import { X, Check } from 'lucide-react';
 import { Z } from '../utils/zLevels';
 
+// TODO: optimizar aún más cambiando a WebP (<500 KB) con https://squoosh.app
 export const WALLPAPERS = [
   { id: 'aurora-light', label: 'Aurora', mode: 'light', theme: 'aurora',
     url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
@@ -23,7 +24,7 @@ export const WALLPAPERS = [
     thumb: 'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=400&auto=format&fit=crop&sat=-100&bri=-30' },
   { id: 'xp', label: 'Windows XP', mode: 'light', theme: 'xp',
     url: 'https://archive.org/download/bliss-600dpi/bliss-600dpi.png',
-    thumb: 'https://archive.org/download/bliss-600dpi/bliss-600dpi.png' },
+    thumb: 'https://preview.redd.it/iconic-windows-xp-bliss-wallpaper-from-800x600-to-8k-v0-eeecqnbbmoje1.png?width=640&crop=smart&auto=webp&s=73e03b15793c7d2e9db718ccc218945ea67ba8fc' },
 ];
 
 const THEMES = ['aurora', 'mountain', 'forest', 'xp'];

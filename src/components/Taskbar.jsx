@@ -182,7 +182,9 @@ const Taskbar = ({ isDarkMode, setIsDarkMode, themeMode, onShutdown, currentWall
           <div className="p-1 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg transition-colors flex items-center justify-center"><Battery size={13} /></div>
         </div>
         <button onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-colors flex items-center justify-center cursor-pointer text-gray-600 dark:text-white"
+          disabled={themeMode === 'xp'}
+          className={`p-1 rounded-lg transition-colors flex items-center justify-center text-gray-600 dark:text-white
+            ${themeMode === 'xp' ? 'opacity-40 cursor-not-allowed' : 'hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer'}`}
           title={isDarkMode ? "Modo claro" : "Modo oscuro"}>
           {isDarkMode ? <Sun size={13} className="text-yellow-400" /> : <Moon size={13} />}
         </button>

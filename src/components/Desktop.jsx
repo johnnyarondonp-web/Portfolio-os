@@ -201,6 +201,14 @@ const Desktop = ({ children, isDarkMode, themeMode, wallpaperUrl }) => {
   const desktopRef = useRef(null);
   const imgRef = useRef(null);
   const timeoutRef = useRef(null);
+
+  // FIX: usar un ref para rastrear la URL actualmente mostrada.
+  // Incluir `currentBg` como dependencia del efecto causaba una condición de
+  // carrera: al hacer click rápido varias veces, el efecto se re-ejecutaba
+  // con un `currentBg` ya desactualizado y cortaba la transición en curso,
+  // dejando el fondo "congelado". El ref nunca causa re-renders y siempre
+  // tiene el valor más reciente sin re-disparar el efecto.
+  const committedUrlRef = useRef(wallpaperUrl || DEFAULT_LIGHT_URL);
   const [currentBg, setCurrentBg] = useState(wallpaperUrl || DEFAULT_LIGHT_URL);
   const [nextBg, setNextBg] = useState(null);
 
@@ -208,7 +216,15 @@ const Desktop = ({ children, isDarkMode, themeMode, wallpaperUrl }) => {
 
   useEffect(() => {
     const target = wallpaperUrl || (isDarkMode ? DEFAULT_DARK_URL : DEFAULT_LIGHT_URL);
-    if (target === currentBg) return;
+
+    // Comparar contra el ref (siempre fresco) en lugar del estado (puede estar desactualizado)
+    if (target === committedUrlRef.current) return;
+
+    // Cancelar cualquier transición en vuelo antes de iniciar una nueva
+    if (imgRef.current) imgRef.current.onload = null;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    imgRef.current = null;
+    timeoutRef.current = null;
 
     const img = new Image();
     imgRef.current = img;
@@ -216,6 +232,7 @@ const Desktop = ({ children, isDarkMode, themeMode, wallpaperUrl }) => {
     img.onload = () => {
       setNextBg(target);
       timeoutRef.current = setTimeout(() => {
+        committedUrlRef.current = target; // actualizar ref antes que el estado
         setCurrentBg(target);
         setNextBg(null);
         imgRef.current = null;
@@ -231,7 +248,8 @@ const Desktop = ({ children, isDarkMode, themeMode, wallpaperUrl }) => {
       imgRef.current = null;
       timeoutRef.current = null;
     };
-  }, [wallpaperUrl, isDarkMode, currentBg]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallpaperUrl, isDarkMode]); // ← currentBg eliminado intencionalmente de las deps
 
   useEffect(() => {
     const updateMaxRows = () => {

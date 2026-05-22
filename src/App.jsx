@@ -41,6 +41,7 @@ function App() {
   const [themeMode, setThemeMode] = useState('normal');
   const [bootStatus, setBootStatus] = useState('loggingIn');
   const chimePlayed = useRef(false);
+  const darkModeThrottleRef = useRef(false);
   const isMobile = useIsMobile();
   const [selectedWallpaper, setSelectedWallpaper] = useState(DEFAULT_WALLPAPER);
 
@@ -65,7 +66,21 @@ function App() {
     }
   }, [bootStatus]);
 
+  useEffect(() => {
+    if (bootStatus === 'ready') {
+      const xpWallpaper = WALLPAPERS.find(w => w.theme === 'xp');
+      if (xpWallpaper?.url) {
+        const img = new Image();
+        img.src = xpWallpaper.url;
+      }
+    }
+  }, [bootStatus]);
+
   const handleSetDarkMode = useCallback((newDark) => {
+    if (darkModeThrottleRef.current) return;
+    darkModeThrottleRef.current = true;
+    setTimeout(() => { darkModeThrottleRef.current = false; }, 1000);
+
     setIsDarkMode(newDark);
     if (themeMode === 'normal' && selectedWallpaper) {
       const opposite = WALLPAPERS.find(
@@ -138,6 +153,7 @@ function App() {
                     setSelectedWallpaper(wp);
                     if (wp.theme === 'xp') {
                       setThemeMode('xp');
+                      setIsDarkMode(false);
                     } else {
                       setThemeMode('normal');
                       if (wp.mode === 'dark') setIsDarkMode(true);
